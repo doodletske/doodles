@@ -1,19 +1,17 @@
-import Button from "@/components/ui/button";
+import Hero from "@/components/marketing/hero";
+import HowItWorks from "@/components/marketing/HowItWorks";
+import Pricing from "@/components/marketing/pricing/pricing";
+import Contact from "@/components/marketing/contact/contact";
+// import CTA from "@/components/marketing/cta";
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <div className="text-center space-y-6">
-        <h1 className="text-6xl font-bold">
-          Doodlets
-        </h1>
-
-        <p className="text-xl text-gray-500">
-          Turn your memories into personalized coloring books.
-        </p>
-
-        <Button>Create My Book</Button>
-      </div>
+    <main>
+      <Hero />
+      <HowItWorks />
+      <Pricing />
+      <Contact />
+      {/* <CTA /> */}
     </main>
   );
 }

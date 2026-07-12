@@ -1,23 +1,29 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+import type { Metadata } from "next";
 
-const inter = Inter({
-  subsets: ["latin"],
-});
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Doodlets",
-  description: "Photo to Coloring Books for Kids",
+  description:
+    "Turn your favourite memories into personalized coloring books.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className="bg-white text-gray-900">
+        <Navbar />
+
+        {children}
+
+        <Footer />
+      </body>
     </html>
   );
 }
