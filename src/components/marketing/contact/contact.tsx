@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, MapPin, MessageCircle } from "lucide-react";
+import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 
 export default function Contact() {
   return (
@@ -26,6 +26,30 @@ export default function Contact() {
 
         <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
 
+          {/* Call */}
+
+        <a
+          href="tel:+254700000000"
+          className="rounded-3xl border border-gray-200 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+        >
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-orange-600">
+            <Phone size={30} />
+          </div>
+
+          <h3 className="mt-6 text-2xl font-bold">
+            Call Us
+          </h3>
+
+          <p className="mt-3 text-gray-600">
+            Speak directly with our team for immediate assistance.
+          </p>
+
+          <span className="mt-6 inline-block font-semibold text-orange-600">
+            Call Now →
+          </span>
+        </a>
+          
+          
           {/* WhatsApp */}
 
           <a
