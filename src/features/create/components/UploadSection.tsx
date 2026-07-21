@@ -11,6 +11,7 @@ type Props = {
   images: File[];
   setImages: React.Dispatch<React.SetStateAction<File[]>>;
   addImages: (files: File[]) => void;
+  compressing: boolean;
 
   complete: boolean;
 
@@ -28,6 +29,7 @@ export default function UploadSection({
   images,
   setImages,
   addImages,
+  compressing,
   complete,
   onRemove,
   onReplace,
@@ -71,6 +73,7 @@ export default function UploadSection({
         pages={pages}
         images={images}
         addImages={addImages}
+        compressing={compressing}
       />
 
       {/* Book Pages */}

@@ -7,12 +7,14 @@ type Props = {
   pages: number;
   images: File[];
   addImages: (files: File[]) => void;
+  compressing: boolean;
 };
 
 export default function UploadDropzone({
   pages,
   images,
   addImages,
+  compressing,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 

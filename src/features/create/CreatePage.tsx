@@ -7,6 +7,14 @@ import Container from "@/components/layout/Container";
 import PackageSelection from "./components/PackageSelection";
 import UploadSection from "./components/UploadSection";
 
+import { createBook } from "@/services/books/createBook";
+import { uploadBook } from "@/services/storage/uploadBook";
+import { compressImages } from "@/services/images/compressImages";
+
+import { api } from "@/lib/firebase/api";
+
+import { useRouter } from "next/navigation";
+
 import { PackageType } from "./types";
 import { PACKAGES } from "./constants";
 import CustomPackage from "./components/CustomPackage";
@@ -16,6 +24,10 @@ export default function CreatePage() {
     useState<PackageType | null>(null);
 
   const [images, setImages] = useState<File[]>([]);
+  const [compressing, setCompressing] =
+  useState(false);
+
+  const router = useRouter();
 
   const uploadRef = useRef<HTMLDivElement>(null);
   const packageRef = useRef<HTMLDivElement>(null);
@@ -36,20 +48,26 @@ export default function CreatePage() {
     }
   }
 
-  function addImages(files: File[]) {
-  setImages((previous) => {
-    const remaining = pages - previous.length;
 
-    if (remaining <= 0) {
-      return previous;
-    }
+async function addImages(files: File[]) {
+  if (!files.length) return;
 
-    const accepted = files
-      .filter((file) => file.type.startsWith("image/"))
-      .slice(0, remaining);
+  setCompressing(true);
 
-    return [...previous, ...accepted];
-  });
+  try {
+    const compressed = await compressImages(files);
+
+    setImages((previous) => {
+      const remaining = pages - previous.length;
+
+      return [
+        ...previous,
+        ...compressed.slice(0, remaining),
+      ];
+    });
+  } finally {
+    setCompressing(false);
+  }
 }
 
   function changePackage() {
@@ -105,9 +123,43 @@ export default function CreatePage() {
     });
   }
 
-  function handleContinue() {
-    console.log("Sprint 9 → Upload to Firebase");
+  async function handleContinue() {
+  try {
+    // 1. Create the book
+    const book = await createBook(pages);
+
+    console.log("Book created:", book);
+
+    // 2. Upload all photos
+const uploadedPages =
+  await uploadBook(book.id, images);
+
+// 3. Save uploaded pages in PostgreSQL
+await api(
+  `/api/books/${book.id}/pages`,
+  {
+    method: "POST",
+    body: JSON.stringify(uploadedPages),
   }
+);
+
+// 4. Tell the backend to start generating
+await api(
+  `/api/generation/${book.id}`,
+  {
+    method: "POST",
+  }
+);
+
+// 5. Go to the progress page
+router.push(`/books/${book.id}`);
+
+  } catch (err) {
+    console.error(err);
+
+    alert("Upload failed.");
+  }
+}
 
   const pages =
     PACKAGES.find((p) => p.id === selectedPackage)?.pages ?? 0;
@@ -137,6 +189,7 @@ export default function CreatePage() {
       images={images}
       setImages={setImages}
       addImages={addImages}
+      compressing={compressing}      
       complete={complete}
       onRemove={removeImage}
       onReplace={replaceImage}
