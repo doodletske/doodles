@@ -1,9 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
-import FlipBook from "@/components/book/FlipBook";
+import FlipBook, {
+  FlipBookPage,
+} from "@/components/book/FlipBook";
 
 type BookPage = {
   id: string;
@@ -31,7 +34,7 @@ export default function PreviewBookPage() {
 
       if (!response.ok) return;
 
-      const data = await response.json();
+      const data: Book = await response.json();
 
       setBook(data);
     }
@@ -41,13 +44,13 @@ export default function PreviewBookPage() {
 
   if (!book) {
     return (
-      <main className="mx-auto max-w-7xl py-20">
+      <main className="mx-auto max-w-7xl py-20 text-center">
         Loading preview...
       </main>
     );
   }
 
-  const pages = book.pages
+  const pages: FlipBookPage[] = book.pages
     .filter(
       (
         page
@@ -57,62 +60,48 @@ export default function PreviewBookPage() {
     .sort((a, b) => a.pageNumber - b.pageNumber);
 
   return (
-    <main className="min-h-screen bg-gray-100">
-
+    <main className="min-h-screen bg-[#f4f1ea]">
       <div className="mx-auto max-w-7xl px-8 py-10">
 
-        <h1 className="mb-10 text-center text-4xl font-bold">
-          Your Colouring Book
+        <h1 className="mb-2 text-center text-4xl font-bold text-gray-900">
+          Preview Your Colouring Book
         </h1>
 
-        <div className="grid gap-10 lg:grid-cols-2">
+        <p className="mb-10 text-center text-gray-500">
+          Flip through your colouring book before
+          proceeding to checkout.
+        </p>
 
-          {/* ORIGINAL PHOTO */}
-
-          <section>
-
-            <h2 className="mb-4 text-xl font-semibold">
-              Original Photograph
-            </h2>
-
-            <div className="overflow-hidden rounded-2xl border bg-white shadow">
-
-              <img
-                src={pages[0].originalUrl}
-                alt="Original"
-                className="w-full object-cover"
-              />
-
-            </div>
-
-          </section>
-
-          {/* FLIPBOOK */}
-
-          <section>
-
-            <h2 className="mb-4 text-xl font-semibold">
-              Colouring Book Preview
-            </h2>
-
-            <FlipBook pages={pages} />
-
-          </section>
-
+        <div className="flex justify-center">
+          <FlipBook
+            cover="/images/front-cover.jpg"
+            pages={pages}
+          />
         </div>
 
-        <div className="mt-10 flex items-center justify-center">
-
-          <button
-            className="rounded-xl bg-blue-600 px-8 py-4 font-semibold text-white transition hover:bg-blue-700"
+        <div className="mt-12 flex justify-center">
+          <Link
+            href={`/books/${book.id}/checkout`}
+            className="
+              inline-flex
+              items-center
+              justify-center
+              rounded-xl
+              bg-blue-600
+              px-10
+              py-4
+              text-lg
+              font-semibold
+              text-white
+              transition
+              hover:bg-blue-700
+            "
           >
             Continue to Checkout
-          </button>
-
+          </Link>
         </div>
 
       </div>
-
     </main>
   );
 }

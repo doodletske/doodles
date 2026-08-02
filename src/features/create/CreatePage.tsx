@@ -11,8 +11,6 @@ import { createBook } from "@/services/books/createBook";
 import { uploadBook } from "@/services/storage/uploadBook";
 import { compressImages } from "@/services/images/compressImages";
 
-import { api } from "@/lib/firebase/api";
-
 import { useRouter } from "next/navigation";
 
 import { PackageType } from "./types";
@@ -131,28 +129,18 @@ async function addImages(files: File[]) {
     console.log("Book created:", book);
 
     // 2. Upload all photos
-const uploadedPages =
-  await uploadBook(book.id, images);
+    await uploadBook(book.id, images);
 
-// 3. Save uploaded pages in PostgreSQL
-await api(
-  `/api/books/${book.id}/pages`,
-  {
-    method: "POST",
-    body: JSON.stringify(uploadedPages),
-  }
-);
+    // 3. Tell the backend to start generating
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/generation/${book.id}`,
+      {
+        method: "POST",
+      }
+    );
 
-// 4. Tell the backend to start generating
-await api(
-  `/api/generation/${book.id}`,
-  {
-    method: "POST",
-  }
-);
-
-// 5. Go to the progress page
-router.push(`/books/${book.id}`);
+    // 4. Go to the progress page
+    router.push(`/books/${book.id}`);
 
   } catch (err) {
     console.error(err);
