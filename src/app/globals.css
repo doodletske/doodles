@@ -8,8 +8,8 @@
 
 html,
 body {
-  background: white;
-  color: #111827;
+  background: #fffdf7;
+  color: #1d2841;
   scroll-behavior: smooth;
 }
 
@@ -24,4 +24,42 @@ a {
 
 html {
   scroll-behavior: smooth;
+}
+
+::selection {
+  background: #ffd85a;
+  color: #1d2841;
+}
+
+.doodlets-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 9999px;
+  padding: 0.8rem 1.5rem;
+  background: #315dbe;
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 4px 0 #244a9b;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.doodlets-button:hover {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #244a9b;
+}
+
+.doodlets-button--sun {
+  background: #ffd24e !important;
+  color: #243451 !important;
+  box-shadow: 0 4px 0 #dca623 !important;
+}
+
+.doodlets-button--sun:hover {
+  background: #ffe17c !important;
+  box-shadow: 0 2px 0 #dca623 !important;
 }

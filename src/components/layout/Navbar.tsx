@@ -49,15 +49,15 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-[#dbe5f5] bg-[#fffdf7]/95 shadow-[0_3px_18px_rgba(40,74,128,0.08)] backdrop-blur-md">
       <Container>
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-[72px] items-center justify-between">
 
           {/* Logo */}
 
           <button
             onClick={logoClick}
-            className="text-xl font-extrabold tracking-tight text-blue-600 transition hover:text-blue-700"
+            className="font-serif text-2xl font-black tracking-tight text-[#315dbe] transition hover:text-[#244a9b]"
           >
             Doodlets
           </button>
@@ -65,12 +65,12 @@ export default function Navbar() {
           {/* Navigation */}
 
           {pathname === "/" && (
-            <nav className="hidden items-center gap-7 md:flex">
+            <nav className="hidden items-center gap-8 md:flex">
               {links.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-gray-700 transition hover:text-blue-600"
+                  className="text-sm font-bold text-[#40516f] transition hover:text-[#315dbe]"
                 >
                   {link.label}
                 </a>
@@ -129,7 +129,7 @@ export default function Navbar() {
 </div>
   </details>
 ) : (
-            <Button onClick={openModal}>
+            <Button onClick={openModal} className="doodlets-button--sun">
               📖 Make My Book
             </Button>
           )}

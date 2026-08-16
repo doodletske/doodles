@@ -3,24 +3,25 @@ import HeroStats from "./HeroStats";
 
 export default function HeroContent() {
   return (
-    <div>
-      <h1 className="mt-5 text-5xl font-extrabold leading-[1.05] tracking-tight lg:text-7xl">
-        Your Favorite Photos,
+    <div className="relative z-10">
+      <p className="inline-flex rounded-full bg-white/15 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white">
+        Made from your memories
+      </p>
+      <h1 className="mt-5 text-5xl font-black leading-[1.02] tracking-tight text-white lg:text-6xl">
+        Photos that turn into
         <br />
-        Their Next Favorite
-        <br />
-        <span className="text-blue-600">Coloring Book.</span>
+        their next <span className="text-[#ffdf67]">favourite book.</span>
       </h1>
 
-      <p className="mt-5 max-w-xl text-lg leading-7 text-gray-600">
-        Upload 8–20 of your favorite memories and we'll transform
-        them into beautiful coloring pages, professionally print
-        them, and deliver your personalized book right to your
-        doorstep.
+      <p className="mt-5 max-w-xl text-lg leading-7 text-blue-50">
+        Upload 8–20 favourite memories. We turn them into a one-of-a-kind
+        colouring book, print it beautifully, and deliver it to your door.
       </p>
 
       <div className="mt-7">
-        <Button>Create My Book</Button>
+        <Button className="doodlets-button--sun">
+          Create My Book
+        </Button>
       </div>
 
       <HeroStats />

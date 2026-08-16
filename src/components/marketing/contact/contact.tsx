@@ -6,14 +6,15 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="bg-white py-24"
+      className="bg-[#fffdf7] py-16 lg:py-24"
     >
       <div className="mx-auto max-w-7xl px-6">
 
         <div className="mx-auto max-w-3xl text-center">
 
-          <h2 className="text-4xl font-bold text-gray-900 md:text-5xl">
-            Have a Question?
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#e59019]">We&apos;re here to help</p>
+          <h2 className="mt-3 text-4xl font-black text-[#1d2841] md:text-5xl">
+            Have a question?
           </h2>
 
           <p className="mt-5 text-lg text-gray-600">
@@ -24,13 +25,13 @@ export default function Contact() {
 
         </div>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
 
           {/* Call */}
 
         <a
           href="tel:+254700000000"
-          className="rounded-3xl border border-gray-200 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+          className="rounded-[2rem] border border-[#e1e8f4] bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
         >
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-orange-600">
             <Phone size={30} />
@@ -56,7 +57,7 @@ export default function Contact() {
             href="https://wa.me/254700000000"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-3xl border border-gray-200 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            className="rounded-[2rem] border border-[#e1e8f4] bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 text-green-600">
               <MessageCircle size={30} />
@@ -79,7 +80,7 @@ export default function Contact() {
 
           <a
             href="mailto:hello@doodlets.co.ke"
-            className="rounded-3xl border border-gray-200 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            className="rounded-[2rem] border border-[#e1e8f4] bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
           >
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">
               <Mail size={30} />
@@ -98,7 +99,7 @@ export default function Contact() {
           
         </div>
 
-        <div className="mt-20 rounded-3xl bg-blue-600 px-10 py-12 text-center text-white">
+        <div className="mt-14 rounded-[2rem] bg-[#315dbe] px-10 py-12 text-center text-white shadow-[0_15px_30px_rgba(49,93,190,0.2)]">
 
           <h3 className="text-3xl font-bold">
             Still not sure which book is right for you?
