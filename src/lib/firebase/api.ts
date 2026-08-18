@@ -9,6 +9,8 @@ export async function api<T>(
 ): Promise<T> {
   let token: string | undefined;
 
+  await auth.authStateReady();
+
   if (auth.currentUser) {
     token = await auth.currentUser.getIdToken();
   }

@@ -4,7 +4,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 
-import { storage } from "@/lib/firebase/firebase";
+import { auth, storage } from "@/lib/firebase/firebase";
 
 export type UploadedPage = {
   pageNumber: number;
@@ -16,20 +16,35 @@ export async function uploadBook(
   bookId: string,
   images: File[]
 ): Promise<UploadedPage[]> {
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("Please sign in again before uploading your photos.");
+  }
+
   const uploaded: UploadedPage[] = [];
 
   for (let i = 0; i < images.length; i++) {
     const file = images[i];
 
+    const suppliedExtension = file.name.split(".").pop()?.toLowerCase();
     const extension =
-      file.name.split(".").pop() || "jpg";
+      suppliedExtension && /^[a-z0-9]{2,5}$/.test(suppliedExtension)
+        ? suppliedExtension
+        : "jpg";
 
     const storagePath =
-      `books/${bookId}/page-${String(i + 1).padStart(3, "0")}.${extension}`;
+      `users/${user.uid}/originals/${bookId}/page-${String(i + 1).padStart(3, "0")}.${extension}`;
 
     const storageRef = ref(storage, storagePath);
 
-    await uploadBytes(storageRef, file);
+    await uploadBytes(storageRef, file, {
+      contentType: file.type || "image/jpeg",
+      customMetadata: {
+        bookId,
+        pageNumber: String(i + 1),
+      },
+    });
 
     const originalUrl =
       await getDownloadURL(storageRef);

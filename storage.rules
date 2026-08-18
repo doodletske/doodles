@@ -1,0 +1,38 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function ownsPath(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    match /users/{userId}/originals/{bookId}/{fileName} {
+      allow read, delete: if ownsPath(userId);
+
+      allow create, update: if ownsPath(userId)
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Preview and print assets are written only by the trusted backend.
+    // The browser receives short-lived signed links for preview files and
+    // never receives direct access to clean print artwork.
+    match /users/{userId}/preview/{bookId}/{fileName} {
+      allow read, write: if false;
+    }
+
+    match /users/{userId}/generated/{bookId}/{fileName} {
+      allow read, write: if false;
+    }
+
+    // Temporary compatibility for books uploaded before the organized layout.
+    match /users/{userId}/books/{bookId}/{fileName} {
+      allow read, delete: if ownsPath(userId);
+      allow write: if false;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

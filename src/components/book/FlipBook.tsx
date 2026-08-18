@@ -11,7 +11,6 @@ import HTMLFlipBook from "react-pageflip";
 import BookCover from "./BookCover";
 import BookPage from "./BookPage";
 import BookToolbar from "./BookToolbar";
-import OrientationHint from "./OrientationHint";
 
 export type FlipBookPage = {
   pageNumber: number;
@@ -27,12 +26,25 @@ type Props = {
   ) => void;
 };
 
+type PageFlipController = {
+  flipNext: () => void;
+  flipPrev: () => void;
+};
+
+type FlipBookHandle = {
+  pageFlip: () => PageFlipController;
+};
+
+type FlipEvent = {
+  data: number;
+};
+
 export default function FlipBook({
   cover,
   pages,
   onPageChange,
 }: Props) {
-  const flipBook = useRef<any>(null);
+  const flipBook = useRef<FlipBookHandle | null>(null);
 
   const [currentPage, setCurrentPage] =
     useState(1);
@@ -83,7 +95,7 @@ export default function FlipBook({
     }
   }, [pages, onPageChange]);
 
-  function handleFlip(e: any) {
+  function handleFlip(e: FlipEvent) {
     const flipPage = e.data;
 
     setCurrentPage(flipPage + 1);
@@ -107,21 +119,22 @@ export default function FlipBook({
 
   return (
     <div className="flex flex-col items-center">
-
-      <OrientationHint />
-
       <div
         className="
           relative
           rounded-[26px]
           bg-gradient-to-br
-          from-[#5c3a22]
-          via-[#6b472b]
-          to-[#412617]
+          from-[#ffdf67]
+          via-[#e8ad1b]
+          to-[#b87505]
           p-7
-          shadow-[0_35px_70px_rgba(0,0,0,0.35)]
+          ring-1
+          ring-[#ffe98f]
+          shadow-[0_38px_75px_rgba(24,55,112,0.32)]
         "
       >
+        <div className="pointer-events-none absolute inset-0 rounded-[26px] bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.28),transparent_32%),linear-gradient(135deg,transparent,rgba(112,65,0,0.12))]" />
+
         {/* Spine */}
 
         <div
@@ -135,9 +148,10 @@ export default function FlipBook({
             -translate-x-1/2
             rounded-full
             bg-gradient-to-r
-            from-black/35
-            via-white/10
-            to-black/35
+            from-[#142544]
+            via-[#315dbe]
+            to-[#142544]
+            shadow-[0_0_14px_rgba(18,37,72,0.38)]
           "
         />
 

@@ -1,5 +1,10 @@
 import {
+  ConfirmationResult,
   GoogleAuthProvider,
+  RecaptchaVerifier,
+  User,
+  signInAnonymously,
+  signInWithPhoneNumber,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
@@ -10,19 +15,49 @@ import { auth } from "@/lib/firebase/firebase";
 
 const googleProvider = new GoogleAuthProvider();
 
-export async function signInWithGoogle() {
-  const result = await signInWithPopup(auth, googleProvider);
+async function createSession(user: User) {
+  const idToken = await user.getIdToken();
 
-  const idToken = await result.user.getIdToken();
-
-  const session = await api("/api/auth/session", {
+  return api("/api/auth/session", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${idToken}`,
     },
   });
+}
 
-  return session;
+export async function signInWithGoogle() {
+  const result = await signInWithPopup(auth, googleProvider);
+
+  return createSession(result.user);
+}
+
+export async function signInAsGuest() {
+  const result = await signInAnonymously(auth);
+
+  return createSession(result.user);
+}
+
+export function createPhoneRecaptcha(containerId: string) {
+  return new RecaptchaVerifier(auth, containerId, {
+    size: "invisible",
+  });
+}
+
+export async function sendPhoneVerificationCode(
+  phoneNumber: string,
+  verifier: RecaptchaVerifier
+) {
+  return signInWithPhoneNumber(auth, phoneNumber, verifier);
+}
+
+export async function confirmPhoneVerificationCode(
+  confirmation: ConfirmationResult,
+  verificationCode: string
+) {
+  const result = await confirmation.confirm(verificationCode);
+
+  return createSession(result.user);
 }
 
 export async function logout() {

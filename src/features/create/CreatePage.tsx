@@ -8,8 +8,10 @@ import PackageSelection from "./components/PackageSelection";
 import UploadSection from "./components/UploadSection";
 
 import { createBook } from "@/services/books/createBook";
+import { savePages } from "@/services/books/savePages";
 import { uploadBook } from "@/services/storage/uploadBook";
 import { compressImages } from "@/services/images/compressImages";
+import { api } from "@/lib/firebase/api";
 
 import { useRouter } from "next/navigation";
 
@@ -129,17 +131,17 @@ async function addImages(files: File[]) {
     console.log("Book created:", book);
 
     // 2. Upload all photos
-    await uploadBook(book.id, images);
+    const uploadedPages = await uploadBook(book.id, images);
 
-    // 3. Tell the backend to start generating
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/generation/${book.id}`,
-      {
-        method: "POST",
-      }
-    );
+    // 3. Save the page order and uploaded file locations
+    await savePages(book.id, uploadedPages);
 
-    // 4. Go to the progress page
+    // 4. Tell the backend to start generating
+    await api(`/api/generation/${book.id}`, {
+      method: "POST",
+    });
+
+    // 5. Go to the progress page
     router.push(`/books/${book.id}`);
 
   } catch (err) {
@@ -156,8 +158,12 @@ async function addImages(files: File[]) {
     images.length === pages && pages > 0;
 
   return (
-    <Container>
-      <div className="py-16">
+    <div className="relative isolate overflow-hidden bg-[#f7faff]">
+      <div className="pointer-events-none absolute -left-28 top-80 h-64 w-64 rounded-full border-[42px] border-[#e2ecfc]" />
+      <div className="pointer-events-none absolute -right-24 top-[42rem] h-52 w-52 rounded-full bg-[#fff3c4]/60 blur-sm" />
+
+      <Container>
+      <div className="relative py-7 sm:py-9 lg:py-10">
 
         <div ref={packageRef}>
           <PackageSelection
@@ -175,7 +181,6 @@ async function addImages(files: File[]) {
     <UploadSection
       pages={pages}
       images={images}
-      setImages={setImages}
       addImages={addImages}
       compressing={compressing}      
       complete={complete}
@@ -189,6 +194,7 @@ async function addImages(files: File[]) {
   </div>
 ) : null}
       </div>
-    </Container>
+      </Container>
+    </div>
   );
 }

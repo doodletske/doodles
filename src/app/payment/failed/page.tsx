@@ -19,7 +19,7 @@ export default function PaymentFailedPage() {
         </h1>
 
         <p className="mt-5 text-lg text-gray-600">
-          We couldn't confirm your payment.
+          We couldn’t confirm your payment.
           <br />
           Your colouring book has not yet been sent for production.
         </p>
@@ -37,7 +37,7 @@ export default function PaymentFailedPage() {
             <li>💳 Use a different payment method if necessary.</li>
 
             <li>
-              📱 If you believe you were charged, please contact us on WhatsApp and we'll help you.
+              📱 If you believe you were charged, please contact us on WhatsApp and we’ll help you.
             </li>
 
           </ul>

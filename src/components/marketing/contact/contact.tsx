@@ -1,127 +1,120 @@
-"use client";
+import { ArrowUpRight, Mail, MessageCircle, Phone } from "lucide-react";
 
-import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
+import Container from "@/components/layout/Container";
+
+const contactOptions = [
+  {
+    label: "Call us",
+    detail: "Speak directly with our team",
+    action: "Call now",
+    href: "tel:+254111350052",
+    icon: Phone,
+    iconClass: "bg-[#fff0d7] text-[#d96b0b]",
+    external: false,
+  },
+  {
+    label: "WhatsApp",
+    detail: "The quickest way to chat with us",
+    action: "Start a chat",
+    href: "https://wa.me/254111350052",
+    icon: MessageCircle,
+    iconClass: "bg-[#def8e8] text-[#159447]",
+    external: true,
+  },
+  {
+    label: "Email",
+    detail: "hello@doodlets.co.ke",
+    action: "Send an email",
+    href: "mailto:hello@doodlets.co.ke",
+    icon: Mail,
+    iconClass: "bg-[#e6efff] text-[#315dbe]",
+    external: false,
+  },
+];
 
 export default function Contact() {
   return (
-    <section
-      id="contact"
-      className="bg-[#fffdf7] py-16 lg:py-24"
-    >
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="contact" className="scroll-mt-24 bg-[#fffdf7] py-16 lg:py-20">
+      <Container>
+        <div className="overflow-hidden rounded-[2.5rem] border border-[#dbe5f5] bg-white shadow-[0_20px_55px_rgba(41,72,125,0.11)]">
+          <div className="grid lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="relative overflow-hidden bg-[#315dbe] p-8 text-white sm:p-10 lg:p-12">
+              <div className="pointer-events-none absolute -bottom-28 -left-16 h-64 w-64 rounded-full border-[36px] border-white/5" />
+              <div className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full border-[28px] border-[#83aceb]/25" />
 
-        <div className="mx-auto max-w-3xl text-center">
+              <div className="relative">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ffdf67]">
+                  We&apos;re here to help
+                </p>
+                <h2 className="mt-4 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl">
+                  Let&apos;s make something special.
+                </h2>
+                <p className="mt-5 max-w-lg text-lg leading-8 text-[#e2edff]">
+                  Not sure which book to choose, or planning something a little
+                  different? Tell us what you have in mind and we&apos;ll help you
+                  find the right option.
+                </p>
 
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#e59019]">We&apos;re here to help</p>
-          <h2 className="mt-3 text-4xl font-black text-[#1d2841] md:text-5xl">
-            Have a question?
-          </h2>
+                <a
+                  href="https://wa.me/254111350052"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#ffd24e] px-5 text-sm font-black !text-[#243451] shadow-[0_4px_0_#dca623] transition hover:-translate-y-0.5 hover:bg-[#ffe17c]"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Chat on WhatsApp
+                </a>
 
-          <p className="mt-5 text-lg text-gray-600">
-            We're happy to help you create the perfect personalized
-            coloring book. Reach out through any of the channels below
-            and we'll get back to you as soon as possible.
-          </p>
+                <p className="mt-5 text-sm font-semibold text-[#bfd6fa]">
+                  Friendly, human help—no complicated support forms.
+                </p>
+              </div>
+            </div>
 
-        </div>
+            <div className="p-6 sm:p-8 lg:p-10">
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#7a8497]">
+                Choose what&apos;s easiest
+              </p>
+              <div className="mt-5 space-y-3">
+                {contactOptions.map((option) => {
+                  const Icon = option.icon;
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+                  return (
+                    <a
+                      key={option.label}
+                      href={option.href}
+                      target={option.external ? "_blank" : undefined}
+                      rel={option.external ? "noopener noreferrer" : undefined}
+                      className="group flex items-center gap-4 rounded-2xl border border-[#e2e9f4] p-4 transition hover:-translate-y-0.5 hover:border-[#b8cff3] hover:bg-[#f8fbff] hover:shadow-md sm:p-5"
+                    >
+                      <span
+                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${option.iconClass}`}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </span>
 
-          {/* Call */}
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-lg font-black text-[#1d2841]">
+                          {option.label}
+                        </span>
+                        <span className="mt-0.5 block truncate text-sm text-[#697386]">
+                          {option.detail}
+                        </span>
+                      </span>
 
-        <a
-          href="tel:+254700000000"
-          className="rounded-[2rem] border border-[#e1e8f4] bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-        >
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-orange-600">
-            <Phone size={30} />
+                      <span className="hidden items-center gap-1 text-sm font-extrabold text-[#315dbe] sm:flex">
+                        {option.action}
+                        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-
-          <h3 className="mt-6 text-2xl font-bold">
-            Call Us
-          </h3>
-
-          <p className="mt-3 text-gray-600">
-            Speak directly with our team for immediate assistance.
-          </p>
-
-          <span className="mt-6 inline-block font-semibold text-orange-600">
-            Call Now →
-          </span>
-        </a>
-          
-          
-          {/* WhatsApp */}
-
-          <a
-            href="https://wa.me/254700000000"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-[2rem] border border-[#e1e8f4] bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 text-green-600">
-              <MessageCircle size={30} />
-            </div>
-
-            <h3 className="mt-6 text-2xl font-bold">
-              WhatsApp
-            </h3>
-
-            <p className="mt-3 text-gray-600">
-              Chat with us directly.
-            </p>
-
-            <span className="mt-6 inline-block font-semibold text-green-600">
-              Chat on WhatsApp →
-            </span>
-          </a>
-
-          {/* Email */}
-
-          <a
-            href="mailto:hello@doodlets.co.ke"
-            className="rounded-[2rem] border border-[#e1e8f4] bg-white p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">
-              <Mail size={30} />
-            </div>
-
-            <h3 className="mt-6 text-2xl font-bold">
-              Email
-            </h3>
-
-            <p className="mt-3 text-gray-600">
-              hello@doodlets.co.ke
-            </p>
-          </a>
-
-
-          
         </div>
 
-        <div className="mt-14 rounded-[2rem] bg-[#315dbe] px-10 py-12 text-center text-white shadow-[0_15px_30px_rgba(49,93,190,0.2)]">
-
-          <h3 className="text-3xl font-bold">
-            Still not sure which book is right for you?
-          </h3>
-
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-blue-100">
-            We'd love to hear your ideas and help you choose the perfect
-            option for your family or special project.
-          </p>
-
-          <a
-            href="https://wa.me/254700000000"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex rounded-xl bg-white px-8 py-4 text-lg font-semibold text-blue-600 transition hover:bg-gray-100"
-          >
-            Let's Talk
-          </a>
-
-        </div>
-
-      </div>
+      </Container>
     </section>
   );
 }

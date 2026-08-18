@@ -27,7 +27,7 @@ export default function ContinueBar({
           </h3>
 
           <p className="mt-2 text-sm text-green-600">
-            You've uploaded all {pages} pages. Continue to the next step.
+            You’ve uploaded all {pages} pages. Continue to the next step.
           </p>
         </div>
       ) : (

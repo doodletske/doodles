@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Plus } from "lucide-react";
+import { useEffect, useMemo, useRef } from "react";
+import { ArrowLeftRight, Plus, RefreshCw } from "lucide-react";
 
 import UploadSlot from "./UploadSlot";
 
@@ -26,18 +26,17 @@ export default function UploadGrid({
   onMoveLeft,
   onMoveRight,
 }: Props) {
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const addInputRef = useRef<HTMLInputElement>(null);
+  const previewUrls = useMemo(
+    () => images.map((file) => URL.createObjectURL(file)),
+    [images],
+  );
 
   useEffect(() => {
-    const urls = images.map((file) => URL.createObjectURL(file));
-
-    setPreviewUrls(urls);
-
     return () => {
-      urls.forEach((url) => URL.revokeObjectURL(url));
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
     };
-  }, [images]);
+  }, [previewUrls]);
 
   if (images.length === 0) {
     return null;
@@ -51,9 +50,34 @@ export default function UploadGrid({
 
   return (
     <div className="mt-12">
-      <h3 className="mb-6 text-2xl font-bold text-gray-900">
-        Book Pages
-      </h3>
+      <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h3 className="text-2xl font-black text-[#1d2841]">Book Pages</h3>
+          <p className="mt-1 text-sm font-medium text-[#697287]">
+            The order below is the order your pages will appear in the book.
+          </p>
+        </div>
+
+        <div
+          role="note"
+          className="flex max-w-xl items-start gap-3 rounded-2xl border border-[#efd05d] bg-[#fff8d9] px-4 py-3 shadow-sm"
+        >
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#ffd24e] text-[#243451]">
+            <ArrowLeftRight className="h-5 w-5" />
+          </span>
+
+          <div>
+            <p className="text-sm font-black text-[#243451]">
+              Arrange your story your way
+            </p>
+            <p className="mt-1 text-sm leading-6 text-[#5c667a]">
+              Use <RefreshCw className="mx-1 inline h-3.5 w-3.5 text-[#315dbe]" />
+              to replace a photo, or the left and right arrows to move it to a
+              different page.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div className="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
         {images.map((_, index) => (

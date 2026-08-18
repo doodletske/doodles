@@ -24,7 +24,7 @@ export default function CustomPackage({
 
         <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-gray-600">
           Need a custom colouring book, bulk order or something unique?
-          Reach out and we'll help you create exactly what you have in mind.
+          Reach out and we’ll help you create exactly what you have in mind.
         </p>
       </div>
 
@@ -34,7 +34,7 @@ export default function CustomPackage({
         {/* Call */}
 
         <a
-          href="tel:+254700000000"
+          href="tel:+254111350052"
           className="rounded-3xl border border-gray-200 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
         >
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-orange-600">
@@ -57,7 +57,7 @@ export default function CustomPackage({
         {/* WhatsApp */}
 
         <a
-          href="https://wa.me/254700000000"
+          href="https://wa.me/254111350052"
           target="_blank"
           rel="noopener noreferrer"
           className="rounded-3xl border border-gray-200 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
@@ -71,7 +71,7 @@ export default function CustomPackage({
           </h3>
 
           <p className="mt-3 text-gray-600">
-            Chat with us and we'll respond as quickly as possible.
+            Chat with us and we’ll respond as quickly as possible.
           </p>
 
           <span className="mt-6 inline-block font-semibold text-green-600">

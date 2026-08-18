@@ -14,26 +14,29 @@ export default function StepCard({
   icon,
 }: StepCardProps) {
   return (
-    <div className="group relative overflow-hidden rounded-[2rem] border border-[#e1e8f4] bg-white p-7 shadow-[0_10px_25px_rgba(40,74,128,0.08)] transition hover:-translate-y-1 hover:border-[#9cc0f6] hover:shadow-xl">
-      <span className="pointer-events-none absolute -right-3 -top-5 select-none text-[6rem] font-black leading-none text-[#f4f8ff] transition group-hover:text-[#e8f1ff]">
-        {number}
-      </span>
-
-      <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef5ff] text-[#315dbe]">
-        {icon}
+    <article className="group relative bg-white p-6 transition-colors hover:bg-[#fbfdff] lg:p-7">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#eef5ff] text-[#315dbe] transition-transform group-hover:-rotate-3 group-hover:scale-105">
+          {icon}
+        </div>
+        <span className="select-none text-4xl font-black tracking-tighter text-[#dfeafe]">
+          0{number}
+        </span>
       </div>
 
-      <div className="relative mt-5 text-xs font-black uppercase tracking-[0.15em] text-[#e59019]">
+      <div className="mt-9 text-xs font-black uppercase tracking-[0.16em] text-[#d9860b]">
         Step {number}
       </div>
 
-      <h3 className="relative mt-1.5 text-xl font-black text-[#1d2841]">
+      <h3 className="mt-2 text-xl font-black leading-tight text-[#1d2841]">
         {title}
       </h3>
 
-      <p className="relative mt-2 text-sm leading-6 text-gray-600">
+      <p className="mt-3 text-sm leading-6 text-[#5c667a]">
         {description}
       </p>
-    </div>
+
+      <div className="mt-6 h-1 w-10 rounded-full bg-[#ffd24e] transition-all group-hover:w-16" />
+    </article>
   );
 }

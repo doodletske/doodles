@@ -14,7 +14,7 @@ export default function AuthButtons() {
 
       <PhoneButton />
 
-      <div className="pt-2 text-center">
+      <div className="pt-2">
         <GuestButton />
       </div>
 

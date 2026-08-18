@@ -9,7 +9,6 @@ type Props = {
   pages: number;
 
   images: File[];
-  setImages: React.Dispatch<React.SetStateAction<File[]>>;
   addImages: (files: File[]) => void;
   compressing: boolean;
 
@@ -27,7 +26,6 @@ type Props = {
 export default function UploadSection({
   pages,
   images,
-  setImages,
   addImages,
   compressing,
   complete,
@@ -41,22 +39,23 @@ export default function UploadSection({
   return (
     <section
       id="upload-section"
-      className="mt-20 rounded-3xl border border-gray-200 bg-white p-10 shadow-sm"
+      className="relative mt-12 overflow-hidden rounded-[2.25rem] border border-[#dbe5f5] bg-white p-6 shadow-[0_20px_48px_rgba(41,72,125,0.10)] sm:p-8 lg:p-10"
     >
+      <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full border-[32px] border-[#edf4ff]" />
       {/* Header */}
 
-      <div className="mb-10">
-        <span className="rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
+      <div className="relative mb-10">
+        <span className="rounded-full bg-[#eaf8ef] px-4 py-2 text-sm font-black text-[#188447]">
           Step 2 of 2
         </span>
 
-        <h2 className="mt-6 text-4xl font-bold text-gray-900">
-          Upload Your Photos
+        <h2 className="mt-6 text-4xl font-black tracking-tight text-[#1d2841]">
+          Add the moments you love
         </h2>
 
-        <p className="mt-3 max-w-2xl text-lg leading-8 text-gray-600">
+        <p className="mt-3 max-w-2xl text-lg leading-8 text-[#5c667a]">
           Upload exactly <strong>{pages}</strong> photos. Arrange them in the
-          order you'd like them to appear in your colouring book.
+          order you&apos;d like them to appear in your colouring book.
         </p>
       </div>
 

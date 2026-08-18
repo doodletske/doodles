@@ -1,29 +1,22 @@
 @import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-html,
-body {
-  background: #fffdf7;
-  color: #1d2841;
-  scroll-behavior: smooth;
-}
+  body {
+    min-height: 100vh;
+    background: #fffdf7;
+    color: #1d2841;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
 
-body {
-  min-height: 100vh;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-html {
-  scroll-behavior: smooth;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 ::selection {
@@ -62,4 +55,204 @@ html {
 .doodlets-button--sun:hover {
   background: #ffe17c !important;
   box-shadow: 0 2px 0 #dca623 !important;
+}
+
+@keyframes doodlets-delivery-flight {
+  0% {
+    left: -18rem;
+    top: 7rem;
+    opacity: 0;
+    transform: translateY(0) rotate(-3deg);
+  }
+  8% {
+    opacity: 1;
+  }
+  28% {
+    top: 4.5rem;
+    transform: translateY(-0.75rem) rotate(2deg);
+  }
+  56% {
+    top: 7rem;
+    transform: translateY(0.5rem) rotate(-2deg);
+  }
+  72% {
+    left: calc(100% - 22rem);
+    top: 7.5rem;
+    opacity: 1;
+    transform: translateY(0) rotate(1deg);
+  }
+  84% {
+    left: calc(100% - 18rem);
+    top: 4rem;
+    opacity: 0.9;
+    transform: translateY(-1rem) rotate(-4deg);
+  }
+  100% {
+    left: calc(100% - 15rem);
+    top: 1rem;
+    opacity: 0;
+    transform: translateY(-2rem) rotate(-6deg);
+  }
+}
+
+@keyframes doodlets-photo-drop {
+  0%,
+  64% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(6deg) scale(1);
+  }
+  74% {
+    opacity: 1;
+    transform: translate(1.5rem, 2.75rem) rotate(1deg) scale(0.86);
+  }
+  82%,
+  100% {
+    opacity: 0;
+    transform: translate(2.5rem, 5.5rem) rotate(-5deg) scale(0.55);
+  }
+}
+
+@keyframes doodlets-printer-working {
+  0%,
+  68%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  72% {
+    transform: translateY(-0.2rem) rotate(-0.6deg);
+  }
+  76% {
+    transform: translateY(0.1rem) rotate(0.6deg);
+  }
+  80% {
+    transform: translateY(-0.1rem) rotate(-0.3deg);
+  }
+}
+
+.doodlets-delivery-rig {
+  animation: doodlets-delivery-flight 8s ease-in-out infinite;
+  will-change: left, top, opacity, transform;
+}
+
+.doodlets-carried-photo {
+  animation: doodlets-photo-drop 8s ease-in-out infinite;
+  transform-origin: top center;
+  will-change: opacity, transform;
+}
+
+.doodlets-delivery-rig--second,
+.doodlets-delivery-rig--second .doodlets-carried-photo {
+  animation-delay: -4s;
+}
+
+.doodlets-printer {
+  animation: doodlets-printer-working 8s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+@keyframes doodlets-firework-pop {
+  0%,
+  18% {
+    opacity: 0;
+    transform: translateY(3rem) scale(0.08);
+  }
+  24% {
+    opacity: 1;
+  }
+  56% {
+    opacity: 0.95;
+    transform: translateY(0) scale(1);
+  }
+  78%,
+  100% {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(1.28);
+  }
+}
+
+@keyframes doodlets-celebration-float {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: translateY(1rem) rotate(0deg) scale(0.75);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(-1.25rem) rotate(145deg) scale(1.1);
+  }
+}
+
+.doodlets-firework {
+  position: absolute;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 9999px;
+  background: #ffd24e;
+  box-shadow:
+    0 -3.5rem #ffd24e,
+    2.45rem -2.45rem #ffffff,
+    3.5rem 0 #ff8e68,
+    2.45rem 2.45rem #ffd24e,
+    0 3.5rem #ffffff,
+    -2.45rem 2.45rem #6ef0b2,
+    -3.5rem 0 #ffd24e,
+    -2.45rem -2.45rem #ffffff,
+    1.15rem -2.8rem #6ef0b2,
+    2.8rem 1.15rem #ffffff,
+    -1.15rem 2.8rem #ff8e68,
+    -2.8rem -1.15rem #ffd24e;
+  opacity: 0;
+  animation: doodlets-firework-pop 3.2s ease-out 2;
+  will-change: opacity, transform;
+}
+
+.doodlets-firework--second {
+  animation-delay: -1.15s;
+  animation-duration: 3.6s;
+}
+
+.doodlets-firework--third {
+  animation-delay: -2.2s;
+  animation-duration: 4s;
+  scale: 0.72;
+}
+
+.doodlets-firework--fourth {
+  animation-delay: -0.45s;
+  animation-duration: 3.8s;
+  scale: 0.65;
+}
+
+.doodlets-celebration-spark {
+  position: absolute;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 3px solid #ffdf67;
+  transform: rotate(45deg);
+  animation: doodlets-celebration-float 2.8s ease-in-out 3;
+}
+
+.doodlets-celebration-spark--second {
+  border-color: white;
+  animation-delay: -1.3s;
+  animation-duration: 3.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doodlets-delivery-rig,
+  .doodlets-carried-photo,
+  .doodlets-printer {
+    animation: none !important;
+  }
+
+  .doodlets-delivery-rig {
+    left: 18%;
+    top: 5rem;
+  }
+
+  .doodlets-firework,
+  .doodlets-celebration-spark {
+    animation: none !important;
+    opacity: 0.5;
+  }
 }

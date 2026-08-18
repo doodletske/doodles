@@ -1,10 +1,5 @@
 import { api } from "@/lib/firebase/api";
-
-type UploadedPage = {
-  pageNumber: number;
-  downloadUrl: string;
-  storagePath: string;
-};
+import type { UploadedPage } from "@/services/storage/uploadBook";
 
 export async function savePages(
   bookId: string,
@@ -15,7 +10,7 @@ export async function savePages(
     body: JSON.stringify(
       pages.map((page) => ({
         pageNumber: page.pageNumber,
-        originalUrl: page.downloadUrl,
+        originalUrl: page.originalUrl,
         storagePath: page.storagePath,
       }))
     ),

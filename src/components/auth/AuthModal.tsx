@@ -30,7 +30,7 @@ export default function AuthModal() {
         </button>
 
         <h2 className="mb-3 text-center text-3xl font-bold">
-          Let's Get Started
+          Let’s Get Started
         </h2>
 
         <p className="mb-8 text-center text-gray-500">

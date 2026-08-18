@@ -18,6 +18,7 @@ export default function BookPage({
 
   return (
     <div
+      onContextMenu={(event) => event.preventDefault()}
       className="
         relative
         flex
@@ -106,6 +107,7 @@ export default function BookPage({
               max-h-full
               max-w-full
               object-contain
+              pointer-events-none
               select-none
               transition-all
               duration-500
