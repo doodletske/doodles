@@ -48,7 +48,7 @@ export default function ImageComparisonSlider({
   return (
     <div
       ref={containerRef}
-      className="relative aspect-square w-full overflow-hidden rounded-3xl shadow-2xl bg-gray-100 select-none"
+      className="relative aspect-[3/2] w-full select-none overflow-hidden rounded-3xl bg-gray-100 shadow-2xl"
       onClick={(e) => updatePosition(e.clientX)}
       onTouchMove={(e) => updatePosition(e.touches[0].clientX)}
     >
@@ -57,33 +57,24 @@ export default function ImageComparisonSlider({
         src={beforeImage}
         alt={beforeAlt}
         fill
-         sizes="(max-width: 768px) 100vw, 50vw"
+        sizes="(max-width: 768px) 100vw, 50vw"
         priority
         className="object-cover"
       />
 
       {/* AFTER (revealed from the right) */}
       <div
-        className="absolute inset-y-0 right-0 overflow-hidden"
-        style={{
-          width: `${100 - position}%`,
-        }}
+        className="absolute inset-0 overflow-hidden"
+        style={{ clipPath: `inset(0 0 0 ${position}%)` }}
       >
-        <div
-          className="relative h-full"
-          style={{
-            width: "100%",
-          }}
-        >
-          <Image
-            src={afterImage}
-            alt={afterAlt}
-            fill
-             sizes="(max-width: 768px) 100vw, 50vw"
-            priority
-            className="object-cover object-right"
-          />
-        </div>
+        <Image
+          src={afterImage}
+          alt={afterAlt}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority
+          className="object-cover"
+        />
       </div>
 
       {/* Divider */}
@@ -97,8 +88,9 @@ export default function ImageComparisonSlider({
 
       {/* Handle */}
       <SliderHandle
-  position={position}
-  onMouseDown={() => setDragging(true)}/>
+        position={position}
+        onMouseDown={() => setDragging(true)}
+      />
 
       {/* Before Badge */}
       <div className="absolute left-4 top-4 rounded-full bg-black/60 px-4 py-2 text-sm font-semibold text-white backdrop-blur">
