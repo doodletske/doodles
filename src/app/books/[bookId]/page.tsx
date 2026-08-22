@@ -8,7 +8,9 @@ import {
   Check,
   Clock3,
   LoaderCircle,
+  RefreshCw,
   Sparkles,
+  TriangleAlert,
 } from "lucide-react";
 
 import GenerationPageCard, {
@@ -39,29 +41,87 @@ function SkyCloud({ className }: { className: string }) {
 export default function BookProgressPage() {
   const { bookId } = useParams<{ bookId: string }>();
   const [book, setBook] = useState<Book | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [retryToken, setRetryToken] = useState(0);
 
   useEffect(() => {
     let active = true;
+    let interval: number | undefined;
 
     async function loadBook() {
-      const data = await api<Book>(`/api/books/${bookId}`);
+      try {
+        const data = await api<Book>(`/api/books/${bookId}`);
 
-      if (active) {
-        setBook(data);
+        if (active) {
+          setBook(data);
+          setLoadError(null);
+        }
+        return true;
+      } catch (error) {
+        if (active) {
+          setLoadError(
+            error instanceof Error
+              ? error.message
+              : "We couldn't open this book right now.",
+          );
+        }
+        return false;
       }
     }
 
-    void loadBook();
+    void loadBook().then((loaded) => {
+      if (!active || !loaded) return;
 
-    const interval = window.setInterval(() => {
-      void loadBook();
-    }, 3000);
+      interval = window.setInterval(() => {
+        void loadBook().then((refreshed) => {
+          if (!refreshed && interval !== undefined) {
+            window.clearInterval(interval);
+            interval = undefined;
+          }
+        });
+      }, 3000);
+    });
 
     return () => {
       active = false;
-      window.clearInterval(interval);
+      if (interval !== undefined) {
+        window.clearInterval(interval);
+      }
     };
-  }, [bookId]);
+  }, [bookId, retryToken]);
+
+  if (loadError && !book) {
+    return (
+      <main className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-[#68a3e6] px-6 py-16 text-[#243451]">
+        <SkyCloud className="left-[-3rem] top-28 scale-75" />
+        <SkyCloud className="right-8 top-20 hidden sm:block" />
+        <section className="relative w-full max-w-xl rounded-[2rem] border border-white/70 bg-white/95 p-7 text-center shadow-[0_24px_55px_rgba(24,55,112,0.2)] sm:p-10">
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#fff3c4] text-[#b87300]">
+            <TriangleAlert className="h-8 w-8" />
+          </span>
+          <h1 className="mt-5 text-3xl font-black">We couldn’t open your book</h1>
+          <p className="mx-auto mt-3 max-w-md font-medium leading-7 text-[#657087]">
+            Your photos are safe. The studio could not connect just now, so
+            please try opening the book again.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setLoadError(null);
+              setRetryToken((value) => value + 1);
+            }}
+            className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#ffd24e] px-7 font-black text-[#243451] shadow-[0_4px_0_#dca623] transition hover:translate-y-0.5 hover:shadow-[0_2px_0_#dca623]"
+          >
+            <RefreshCw className="h-5 w-5" />
+            Try Again
+          </button>
+          <p className="mt-5 text-xs font-semibold text-[#8a94a8]">
+            {loadError}
+          </p>
+        </section>
+      </main>
+    );
+  }
 
   if (!book) {
     return (
@@ -84,6 +144,11 @@ export default function BookProgressPage() {
   const completed = pages.filter(
     (page) => page.status === "COMPLETED",
   ).length;
+  const failed = pages.filter((page) => page.status === "FAILED").length;
+  const generationStopped =
+    pages.length > 0 &&
+    failed > 0 &&
+    pages.every((page) => ["COMPLETED", "FAILED"].includes(page.status));
   const ready = book.status === "READY_FOR_PAYMENT";
   const percentage = Math.min(
     100,
@@ -117,6 +182,12 @@ export default function BookProgressPage() {
     subtitle = "Every page is complete and waiting for you to explore.";
   }
 
+  if (generationStopped) {
+    title = "We couldn’t finish this book";
+    subtitle =
+      "Your original photos are safe, but the illustration step needs another try.";
+  }
+
   return (
     <main className="relative isolate min-h-screen overflow-hidden bg-[#68a3e6]">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,#4d86d9_0%,#75ade9_44%,#b7ddf7_100%)]" />
@@ -141,7 +212,27 @@ export default function BookProgressPage() {
           </p>
         </header>
 
-        {!ready ? (
+        {generationStopped ? (
+          <div className="mt-7 flex max-w-3xl items-start gap-4 rounded-[1.5rem] border border-[#ffd7d3] bg-white/95 p-5 text-[#243451] shadow-[0_18px_40px_rgba(24,55,112,0.16)]">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#fee8e7] text-[#c33f38]">
+              <TriangleAlert className="h-6 w-6" />
+            </span>
+            <div>
+              <p className="font-black">The studio stopped before completing your pages</p>
+              <p className="mt-1 text-sm font-medium leading-6 text-[#657087]">
+                You can safely leave this page. We have kept all of your
+                original photos, and no completed page has been lost.
+              </p>
+              <Link
+                href="/create"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#ffd24e] px-5 py-2.5 text-sm font-black text-[#243451]"
+              >
+                Start a New Book
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        ) : !ready ? (
           <div className="mt-7 flex max-w-3xl items-start gap-4 rounded-[1.5rem] border border-white/50 bg-white/95 p-5 text-[#243451] shadow-[0_18px_40px_rgba(24,55,112,0.16)]">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#fff3c4] text-[#b87300]">
               <Clock3 className="h-6 w-6" />
@@ -163,13 +254,15 @@ export default function BookProgressPage() {
           </div>
         )}
 
-        <GenerationScene
-          activeImage={activePage?.originalUrl}
-          queuedImage={queuedPage?.originalUrl}
-          completed={completed}
-          pageCount={book.pageCount}
-          ready={ready}
-        />
+        {!generationStopped && (
+          <GenerationScene
+            activeImage={activePage?.originalUrl}
+            queuedImage={queuedPage?.originalUrl}
+            completed={completed}
+            pageCount={book.pageCount}
+            ready={ready}
+          />
+        )}
 
         <section className="relative mt-8 rounded-[2rem] border border-white/60 bg-white/95 p-5 shadow-[0_24px_55px_rgba(24,55,112,0.18)] backdrop-blur-sm sm:p-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
@@ -190,6 +283,11 @@ export default function BookProgressPage() {
                 Preview Book
                 <ArrowRight className="h-5 w-5" />
               </Link>
+            ) : generationStopped ? (
+              <span className="inline-flex items-center gap-2 self-start rounded-full bg-[#fee8e7] px-4 py-2 text-sm font-black text-[#c33f38] sm:self-auto">
+                <TriangleAlert className="h-4 w-4" />
+                Needs attention
+              </span>
             ) : (
               <span className="inline-flex items-center gap-2 self-start rounded-full bg-[#e9f1ff] px-4 py-2 text-sm font-black text-[#315dbe] sm:self-auto">
                 <LoaderCircle className="h-4 w-4 animate-spin" />
@@ -203,7 +301,7 @@ export default function BookProgressPage() {
               className="relative h-full rounded-full bg-[linear-gradient(90deg,#315dbe,#5b83dc)] transition-[width] duration-700 ease-out"
               style={{ width: `${percentage}%` }}
             >
-              {!ready && (
+              {!ready && !generationStopped && (
                 <span className="absolute inset-y-0 right-0 w-16 animate-pulse bg-gradient-to-r from-transparent to-white/45" />
               )}
             </div>

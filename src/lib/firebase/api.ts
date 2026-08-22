@@ -1,7 +1,16 @@
 import { auth } from "@/lib/firebase/firebase";
 
+const CLOUDFLARE_API_URL = "https://doodlets-api.doodletske.workers.dev";
+const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+// NEXT_PUBLIC_* values are frozen into the browser bundle during `next build`.
+// A local .env.local file is useful for development, but it must never make a
+// production build call localhost from a customer's browser.
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  process.env.NODE_ENV === "production" &&
+  (!configuredApiUrl || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(configuredApiUrl))
+    ? CLOUDFLARE_API_URL
+    : configuredApiUrl || "http://localhost:5000";
 
 function buildApiUrl(path: string) {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
