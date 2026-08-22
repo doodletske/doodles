@@ -123,7 +123,13 @@ async function addImages(files: File[]) {
     });
   }
 
-  async function handleContinue() {
+async function handleContinue() {
+  let stage:
+    | "creating"
+    | "uploading"
+    | "saving"
+    | "generating" = "creating";
+
   try {
     // 1. Create the book
     const book = await createBook(pages);
@@ -131,12 +137,15 @@ async function addImages(files: File[]) {
     console.log("Book created:", book);
 
     // 2. Upload all photos
+    stage = "uploading";
     const uploadedPages = await uploadBook(book.id, images);
 
     // 3. Save the page order and uploaded file locations
+    stage = "saving";
     await savePages(book.id, uploadedPages);
 
     // 4. Tell the backend to start generating
+    stage = "generating";
     await api(`/api/generation/${book.id}`, {
       method: "POST",
     });
@@ -147,7 +156,18 @@ async function addImages(files: File[]) {
   } catch (err) {
     console.error(err);
 
-    alert("Upload failed.");
+    const messages = {
+      creating:
+        "We couldn't start your book. Please check your connection and try again.",
+      uploading:
+        "We couldn't upload your photos. Your selected photos are still here, so you can try again.",
+      saving:
+        "Your photos uploaded, but we couldn't save their page order. Please try again.",
+      generating:
+        "Your photos are saved, but we couldn't start the colouring process. Please try again.",
+    };
+
+    alert(messages[stage]);
   }
 }
 
