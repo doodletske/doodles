@@ -31,7 +31,7 @@ const serviceLabels: Record<string, string> = {
   firebase: "Firebase",
   imageGeneration: "Image generation",
   payments: "Paystack payments",
-  email: "Order emails",
+  email: "Admin activity emails",
 };
 
 export default function AdminSettingsPage() {

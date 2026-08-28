@@ -82,7 +82,7 @@ export default function CustomPackage({
         {/* Email */}
 
         <a
-          href="mailto:hello@doodlets.co.ke"
+          href="mailto:hello@doodles.co.ke"
           className="rounded-3xl border border-gray-200 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
         >
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">

@@ -23,9 +23,9 @@ const contactOptions = [
   },
   {
     label: "Email",
-    detail: "hello@doodlets.co.ke",
+    detail: "hello@doodles.co.ke",
     action: "Send an email",
-    href: "mailto:hello@doodlets.co.ke",
+    href: "mailto:hello@doodles.co.ke",
     icon: Mail,
     iconClass: "bg-[#e6efff] text-[#315dbe]",
     external: false,
