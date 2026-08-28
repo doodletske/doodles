@@ -100,7 +100,7 @@ export default function PreviewBookPage() {
         <header className="mx-auto max-w-3xl text-center text-white">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/15 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] backdrop-blur-sm">
             <Sparkles className="h-4 w-4 text-[#ffdf67]" />
-            Your Doodlets keepsake
+            Your Doodles keepsake
           </span>
 
           <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">

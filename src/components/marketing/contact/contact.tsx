@@ -7,7 +7,7 @@ const contactOptions = [
     label: "Call us",
     detail: "Speak directly with our team",
     action: "Call now",
-    href: "tel:+254111350052",
+    href: "tel:+254111350042",
     icon: Phone,
     iconClass: "bg-[#fff0d7] text-[#d96b0b]",
     external: false,
@@ -16,7 +16,7 @@ const contactOptions = [
     label: "WhatsApp",
     detail: "The quickest way to chat with us",
     action: "Start a chat",
-    href: "https://wa.me/254111350052",
+    href: "https://wa.me/254111350042",
     icon: MessageCircle,
     iconClass: "bg-[#def8e8] text-[#159447]",
     external: true,
@@ -47,16 +47,16 @@ export default function Contact() {
                   We&apos;re here to help
                 </p>
                 <h2 className="mt-4 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl">
-                  Let&apos;s make something special.
+                  Ready to create a gift they&apos;ll remember?
                 </h2>
                 <p className="mt-5 max-w-lg text-lg leading-8 text-[#e2edff]">
-                  Not sure which book to choose, or planning something a little
-                  different? Tell us what you have in mind and we&apos;ll help you
-                  find the right option.
+                  Not sure which book to choose, or planning something special?
+                  Tell us what you have in mind and we&apos;ll help you create the
+                  right Doodles book.
                 </p>
 
                 <a
-                  href="https://wa.me/254111350052"
+                  href="https://wa.me/254111350042"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#ffd24e] px-5 text-sm font-black !text-[#243451] shadow-[0_4px_0_#dca623] transition hover:-translate-y-0.5 hover:bg-[#ffe17c]"

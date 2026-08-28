@@ -45,7 +45,7 @@ export default function AdminDashboardPage() {
     <div>
       <AdminPageHeader
         eyebrow="Today at a glance"
-        title="Doodlets Dashboard"
+        title="Doodles Dashboard"
         description="Track sales, watch the production queue, and move every keepsake smoothly from payment to delivery."
         icon={LayoutDashboard}
         action={

@@ -103,11 +103,11 @@ export default function Navbar() {
         <div className="flex h-[72px] items-center justify-between">
           <button
             onClick={logoClick}
-            aria-label="Doodlets home"
+            aria-label="Doodles home"
             className="rounded-xl transition duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315dbe] focus-visible:ring-offset-2"
           >
             <Image
-              src="/images/brand/doodlets-logo-final.png"
+              src="/images/brand/doodles-logo-final.png"
               alt=""
               width={192}
               height={72}

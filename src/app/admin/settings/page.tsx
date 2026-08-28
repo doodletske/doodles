@@ -9,7 +9,20 @@ import { api } from "@/lib/firebase/api";
 
 type AdminSettings = {
   packages: { pageCount: number; name: string; price: number }[];
-  generation: { model: string; quality: string; size: string };
+  generation: {
+    model: string;
+    quality: string;
+    size: string;
+    usageToday: {
+      pages: number;
+      users: number;
+      guestDailyLimit: number;
+      signedInDailyLimit: number;
+      maxAttempts: number;
+      generationAttempts: number;
+      globalDailyLimit: number;
+    };
+  };
   services: Record<string, boolean>;
 };
 
@@ -36,7 +49,7 @@ export default function AdminSettingsPage() {
       <AdminPageHeader
         eyebrow="Launch readiness"
         title="Settings"
-        description="A safe, read-only view of the commercial settings and service connections currently powering Doodlets."
+        description="A safe, read-only view of the commercial settings and service connections currently powering Doodles."
         icon={Settings}
       />
 
@@ -51,7 +64,7 @@ export default function AdminSettingsPage() {
             <div className="mt-6 space-y-3">
               {settings.packages.map((bookPackage) => (
                 <div key={bookPackage.pageCount} className="flex items-center justify-between rounded-2xl bg-[#f7f9fd] p-4">
-                  <div><p className="font-black text-[#243451]">{bookPackage.name}</p><p className="mt-1 text-xs font-semibold text-[#8992a4]">{bookPackage.pageCount} colouring pages</p></div>
+                  <div><p className="font-black text-[#243451]">{bookPackage.name}</p><p className="mt-1 text-xs font-semibold text-[#8992a4]">{bookPackage.pageCount * 2} printed pages · {bookPackage.pageCount} photos</p></div>
                   <span className="text-lg font-black text-[#315dbe]">{formatKes(bookPackage.price)}</span>
                 </div>
               ))}
@@ -64,6 +77,10 @@ export default function AdminSettingsPage() {
               <div className="flex justify-between gap-4 rounded-2xl bg-[#f7f9fd] p-4"><dt className="font-bold text-[#7a8498]">Model</dt><dd className="text-right font-black text-[#243451]">{settings.generation.model}</dd></div>
               <div className="flex justify-between gap-4 rounded-2xl bg-[#f7f9fd] p-4"><dt className="font-bold text-[#7a8498]">Quality</dt><dd className="capitalize font-black text-[#243451]">{settings.generation.quality}</dd></div>
               <div className="flex justify-between gap-4 rounded-2xl bg-[#f7f9fd] p-4"><dt className="font-bold text-[#7a8498]">Canvas</dt><dd className="font-black text-[#243451]">{settings.generation.size}</dd></div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-2xl bg-[#e9f1ff] p-4"><dt className="text-xs font-black uppercase tracking-wider text-[#61728e]">Used today</dt><dd className="mt-2 text-2xl font-black text-[#315dbe]">{settings.generation.usageToday.generationAttempts} / {settings.generation.usageToday.globalDailyLimit}</dd><p className="mt-1 text-xs font-semibold text-[#7a8498]">Generation attempts · {settings.generation.usageToday.pages} distinct pages</p></div>
+                <div className="rounded-2xl bg-[#fff3c4] p-4"><dt className="text-xs font-black uppercase tracking-wider text-[#765000]">Customer limits</dt><dd className="mt-2 text-sm font-black text-[#243451]">{settings.generation.usageToday.guestDailyLimit} guest · {settings.generation.usageToday.signedInDailyLimit} signed in</dd><p className="mt-1 text-xs font-semibold text-[#7a8498]">Maximum {settings.generation.usageToday.maxAttempts} attempts per photo</p></div>
+              </div>
             </dl>
           </section>
 

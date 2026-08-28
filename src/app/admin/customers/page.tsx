@@ -32,7 +32,7 @@ export default function AdminCustomersPage() {
       <AdminPageHeader
         eyebrow="Customer history"
         title="Customers"
-        description="See who is creating with Doodlets, their book history, completed purchases, and lifetime spend."
+        description="See who is creating with Doodles, their book history, completed purchases, and lifetime spend."
         icon={Users}
       />
 

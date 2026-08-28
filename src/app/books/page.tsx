@@ -78,7 +78,7 @@ const draftStatusDetails: Record<
   GENERATING: {
     label: "Creating pages",
     classes: "bg-[#fff3c4] text-[#8a6200]",
-    description: "The Doodlets studio is illustrating your pages.",
+    description: "The Doodles studio is illustrating your pages.",
   },
   READY_FOR_PAYMENT: {
     label: "Awaiting payment",
@@ -109,7 +109,7 @@ function packageName(pageCount: number) {
     ? "Little Doodler"
     : pageCount === 16
       ? "Big Dreamer"
-      : "Custom Doodlets Book";
+      : "Custom Doodles Book";
 }
 
 function formatDate(value: string) {
@@ -167,7 +167,7 @@ function BookHistoryCard({
           <div className="flex h-full flex-col items-center justify-center text-[#315dbe]">
             <BookOpen className="h-16 w-16 opacity-30" />
             <span className="mt-3 text-xs font-black uppercase tracking-[0.15em] opacity-55">
-              Doodlets book
+              Doodles book
             </span>
           </div>
         )}
@@ -175,7 +175,7 @@ function BookHistoryCard({
           {displayDetails.label}
         </span>
         <span className="absolute bottom-3 left-6 z-20 rounded-full bg-[#243451]/85 px-3 py-1.5 text-xs font-black text-white backdrop-blur-sm">
-          {book.pageCount} pages
+          {book.pageCount * 2}-page book
         </span>
       </div>
 

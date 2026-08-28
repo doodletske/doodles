@@ -11,11 +11,11 @@ export default function Footer() {
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Link
                 href="/"
-                aria-label="Doodlets home"
+                aria-label="Doodles home"
                 className="rounded-2xl bg-white px-3 py-1.5 transition hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffd24e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#17213a]"
               >
                 <Image
-                  src="/images/brand/doodlets-logo-final.png"
+                  src="/images/brand/doodles-logo-final.png"
                   alt=""
                   width={160}
                   height={60}
@@ -23,8 +23,8 @@ export default function Footer() {
                 />
               </Link>
               <p className="max-w-sm text-sm leading-6 text-[#b9c4d8]">
-                Turning the photos your family loves into colouring books they
-                can hold, colour and keep.
+                Turning the photos your family loves into personalised
+                colouring books children can hold, colour and keep.
               </p>
             </div>
 
@@ -42,8 +42,8 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col justify-between gap-2 border-t border-white/10 pt-6 text-xs text-[#8f9bb0] sm:flex-row">
-            <p>© {new Date().getFullYear()} Doodlets. All rights reserved.</p>
-            <p>Made with happy memories in Kenya.</p>
+            <p>© {new Date().getFullYear()} Doodles. All rights reserved.</p>
+            <p>Made with happy family memories.</p>
           </div>
         </div>
       </Container>

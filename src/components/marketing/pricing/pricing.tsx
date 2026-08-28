@@ -6,30 +6,32 @@ import Container from "@/components/layout/Container";
 const bookPackages = [
   {
     name: "Little Doodler",
-    tagline: "A perfect first adventure",
+    tagline: "16 special pages made from 8 memories",
     price: "KES 1,199",
     featured: false,
     icon: Palette,
     features: [
-      "8 personalised colouring pages",
-      "Created from 8 of your photos",
-      "Original photo beside every page",
+      "8 original family photos",
+      "8 matching colouring illustrations",
+      "16 printed interior pages",
+      "A4-sized personalised book",
       "Thick, colouring-friendly paper",
-      "Delivery available across Kenya",
+      "Delivery available",
     ],
   },
   {
     name: "Big Dreamer",
-    tagline: "More moments to colour",
-    price: "KES 1,799",
+    tagline: "32 pages of memories and colouring fun",
+    price: "KES 1,899",
     featured: true,
     icon: Sparkles,
     features: [
-      "16 personalised colouring pages",
-      "Created from up to 16 photos",
-      "Original photo beside every page",
+      "16 original family photos",
+      "16 matching colouring illustrations",
+      "32 printed interior pages",
+      "A4-sized personalised book",
       "Thick, colouring-friendly paper",
-      "Delivery available across Kenya",
+      "Delivery available",
       "Best value per page",
     ],
   },
@@ -51,14 +53,15 @@ export default function Pricing() {
       <Container>
         <div className="max-w-2xl">
             <span className="text-xs font-black uppercase tracking-[0.18em] text-[#d9860b]">
-              Pick your adventure
+              Pick their next adventure
             </span>
             <h2 className="mt-4 text-4xl font-black leading-none tracking-tight text-[#1d2841] md:text-5xl">
-              Choose the book that fits your story
+              Choose their perfect colouring book
             </h2>
             <p className="mt-5 text-lg leading-8 text-[#5c667a]">
-              Every Doodlets book pairs your original photos with personalised
-              colouring pages, printed and bound as a keepsake.
+              Every Doodles book pairs your original photos with matching
+              colouring illustrations, giving your child twice as many printed
+              pages to enjoy and treasure.
             </p>
         </div>
 

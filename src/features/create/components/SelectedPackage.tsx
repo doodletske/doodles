@@ -21,7 +21,7 @@ export default function SelectedPackage({
       </h3>
 
       <p className="mt-2">
-        {pkg.title} • {pkg.pages} Pages
+        {pkg.title} • {pkg.pages * 2}-page book • {pkg.pages} photos
       </p>
 
       <button

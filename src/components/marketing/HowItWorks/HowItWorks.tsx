@@ -18,11 +18,11 @@ export default function HowItWorks() {
               A little magic, three steps
             </span>
             <h2 className="mt-4 text-4xl font-black leading-[1.05] tracking-tight text-[#1d2841] md:text-5xl">
-              Your story starts here
+              From your photos to their new favourite colouring book
             </h2>
             <p className="mt-5 max-w-md text-lg leading-8 text-[#5c667a]">
-              From favourite photo to printed keepsake, creating your book is
-              simple from start to finish.
+              Turn the moments your child recognises and loves into a printed
+              book they can colour, share and treasure.
             </p>
 
             <div className="mt-7 flex items-center gap-3 text-sm font-extrabold text-[#315dbe]">
@@ -37,20 +37,20 @@ export default function HowItWorks() {
           <div className="grid gap-px overflow-hidden rounded-[2rem] border border-[#dbe5f5] bg-[#dbe5f5] shadow-[0_18px_45px_rgba(41,72,125,0.10)] md:grid-cols-3">
             <StepCard
               number="1"
-              title="Upload your photos"
-              description="Choose 8–20 favourite moments straight from your phone or computer."
+              title="Choose your memories"
+              description="Upload 8 or 16 favourite photos straight from your phone or computer."
               icon={<Upload className="h-5 w-5" />}
             />
             <StepCard
               number="2"
-              title="We create the artwork"
-              description="Each memory becomes a clean, joyful colouring-page illustration."
+              title="We create every colouring page"
+              description="We transform every photo into a joyful illustration while keeping familiar people and moments recognisable."
               icon={<WandSparkles className="h-5 w-5" />}
             />
             <StepCard
               number="3"
-              title="We print & deliver"
-              description="Your personalised book is printed beautifully and prepared for you."
+              title="We print and deliver"
+              description="Your photos and matching illustrations are printed as a 16- or 32-page A4 book and delivered to your preferred location."
               icon={<Package className="h-5 w-5" />}
             />
           </div>
@@ -75,7 +75,7 @@ export default function HowItWorks() {
               <div className="absolute bottom-4 right-6 h-40 w-[90%] rounded-[50%] bg-[#eef0ff] md:w-[28rem]" />
               <Image
                 src="/images/decor/open-colouring-book.png"
-                alt="An open Doodlets book showing a family photograph beside its colouring page"
+                alt="An open Doodles book showing a family photograph beside its colouring page"
                 width={520}
                 height={347}
                 className="relative z-10 h-auto w-full max-w-[30rem] drop-shadow-[0_18px_22px_rgba(41,72,125,0.18)]"

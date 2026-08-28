@@ -33,8 +33,9 @@ export default function PackageSelection({
           </h1>
 
           <p className="mt-4 max-w-xl text-base leading-7 text-[#5c667a] sm:text-lg">
-            Select the package that fits your favourite moments. You&apos;ll add
-            the photos for each page next.
+            Select the package that fits your favourite moments. Every photo
+            becomes two printed pages: the original memory and its matching
+            colouring illustration.
           </p>
         </div>
 
@@ -42,7 +43,7 @@ export default function PackageSelection({
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e9f1ff] text-[#315dbe]">
             <Images className="h-5 w-5" />
           </span>
-          Every colouring page begins with one of your own photos.
+          Every photo adds two printed pages to your finished book.
         </div>
       </div>
 

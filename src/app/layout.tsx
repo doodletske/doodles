@@ -10,9 +10,23 @@ import { AuthModalProvider } from "@/context/AuthModalContext";
 import AuthModal from "@/components/auth/AuthModal";
 
 export const metadata: Metadata = {
-  title: "Doodlets",
+  metadataBase: new URL("https://doodles.co.ke"),
+  title: "Personalised Colouring Books from Your Photos | Doodles",
   description:
-    "Turn your favourite memories into personalized coloring books.",
+    "Turn 8 or 16 family photos into a professionally printed 16- or 32-page A4 personalised colouring book for children—a meaningful gift filled with familiar faces and favourite memories.",
+  keywords: [
+    "personalised colouring book",
+    "colouring book from photos",
+    "personalised gift for children",
+    "custom family colouring book",
+    "photo colouring book",
+  ],
+  openGraph: {
+    title: "Personalised Colouring Books from Your Photos | Doodles",
+    description:
+      "Turn family photos into a professionally printed 16- or 32-page personalised colouring book made just for them.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

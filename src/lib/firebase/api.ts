@@ -1,6 +1,6 @@
 import { auth } from "@/lib/firebase/firebase";
 
-const CLOUDFLARE_API_URL = "https://doodlets-api.doodletske.workers.dev";
+const CLOUDFLARE_API_URL = "https://api.doodles.co.ke";
 const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 // NEXT_PUBLIC_* values are frozen into the browser bundle during `next build`.

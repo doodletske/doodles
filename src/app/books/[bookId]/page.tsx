@@ -18,6 +18,7 @@ import GenerationPageCard, {
 } from "@/components/book/GenerationPageCard";
 import GenerationScene from "@/components/book/GenerationScene";
 import { api } from "@/lib/firebase/api";
+import { uploadBookPage } from "@/services/storage/uploadBook";
 
 type Book = {
   id: string;
@@ -43,6 +44,69 @@ export default function BookProgressPage() {
   const [book, setBook] = useState<Book | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [retryToken, setRetryToken] = useState(0);
+  const [retryingPageId, setRetryingPageId] = useState<string | null>(null);
+  const [replacingPageId, setReplacingPageId] = useState<string | null>(null);
+  const [generationActionError, setGenerationActionError] = useState<string | null>(null);
+
+  async function retryPage(page: GenerationBookPage) {
+    if (retryingPageId || replacingPageId) return;
+    try {
+      setRetryingPageId(page.id);
+      setGenerationActionError(null);
+      await api(`/api/generation/${bookId}`, {
+        method: "POST",
+        body: JSON.stringify({ pageIds: [page.id] }),
+      });
+      setRetryToken((value) => value + 1);
+    } catch (error) {
+      setGenerationActionError(
+        error instanceof Error
+          ? error.message
+          : `We couldn't restart page ${page.pageNumber} just now.`,
+      );
+    } finally {
+      setRetryingPageId(null);
+    }
+  }
+
+  async function replacePhoto(page: GenerationBookPage, file: File) {
+    if (retryingPageId || replacingPageId) return;
+    if (!file.type.startsWith("image/")) {
+      setGenerationActionError("Please choose a JPG, PNG or WebP photo.");
+      return;
+    }
+    if (file.size > 15 * 1024 * 1024) {
+      setGenerationActionError("Please choose a photo smaller than 15 MB.");
+      return;
+    }
+
+    try {
+      setReplacingPageId(page.id);
+      setGenerationActionError(null);
+      const replacement = await uploadBookPage(
+        bookId,
+        page.pageNumber,
+        file,
+      );
+      await api(`/api/books/${bookId}/pages/${page.id}`, {
+        method: "PUT",
+        body: JSON.stringify(replacement),
+      });
+      await api(`/api/generation/${bookId}`, {
+        method: "POST",
+        body: JSON.stringify({ pageIds: [page.id] }),
+      });
+      setRetryToken((value) => value + 1);
+    } catch (error) {
+      setGenerationActionError(
+        error instanceof Error
+          ? error.message
+          : `We couldn't replace page ${page.pageNumber} just now.`,
+      );
+    } finally {
+      setReplacingPageId(null);
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -132,7 +196,7 @@ export default function BookProgressPage() {
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#315dbe] shadow-xl">
             <LoaderCircle className="h-8 w-8 animate-spin" />
           </span>
-          <p className="mt-5 text-lg font-black">Opening the Doodlets studio...</p>
+          <p className="mt-5 text-lg font-black">Opening the Doodles studio...</p>
         </div>
       </main>
     );
@@ -201,7 +265,7 @@ export default function BookProgressPage() {
         <header className="max-w-3xl text-white" aria-live="polite">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/15 px-4 py-2 text-xs font-black uppercase tracking-[0.15em] backdrop-blur-sm">
             <Sparkles className="h-4 w-4 text-[#ffdf67]" />
-            Doodlets book studio
+            Doodles book studio
           </span>
 
           <h1 className="mt-5 text-4xl font-black leading-[1.04] tracking-tight sm:text-5xl lg:text-6xl">
@@ -223,13 +287,32 @@ export default function BookProgressPage() {
                 You can safely leave this page. We have kept all of your
                 original photos, and no completed page has been lost.
               </p>
-              <Link
-                href="/create"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#ffd24e] px-5 py-2.5 text-sm font-black text-[#243451]"
-              >
-                Start a New Book
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    document
+                      .getElementById("book-pages")
+                      ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                  }
+                  className="inline-flex items-center gap-2 rounded-full bg-[#ffd24e] px-5 py-2.5 text-sm font-black text-[#243451]"
+                >
+                  <TriangleAlert className="h-4 w-4" />
+                  Review failed pages
+                </button>
+                <Link
+                  href="/create"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#dbe5f5] bg-white px-5 py-2.5 text-sm font-black text-[#315dbe]"
+                >
+                  Start a New Book
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+              {generationActionError && (
+                <p className="mt-3 text-sm font-bold text-[#c33f38]">
+                  {generationActionError}
+                </p>
+              )}
             </div>
           </div>
         ) : !ready ? (
@@ -250,7 +333,7 @@ export default function BookProgressPage() {
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#dff8e8]">
               <Check className="h-6 w-6" strokeWidth={3} />
             </span>
-            <span className="font-black">All {book.pageCount} pages are complete.</span>
+            <span className="font-black">All {book.pageCount} colouring illustrations are complete.</span>
           </div>
         )}
 
@@ -271,7 +354,7 @@ export default function BookProgressPage() {
                 Book progress
               </span>
               <p className="mt-2 text-3xl font-black text-[#1d2841]">
-                {completed} of {book.pageCount} pages complete
+                {completed} of {book.pageCount} colouring illustrations complete
               </p>
             </div>
 
@@ -307,7 +390,7 @@ export default function BookProgressPage() {
             </div>
           </div>
 
-          <div className="mt-9 flex items-end justify-between gap-4">
+          <div id="book-pages" className="mt-9 flex scroll-mt-8 items-end justify-between gap-4">
             <div>
               <h2 className="text-2xl font-black text-[#1d2841]">
                 Your book pages
@@ -320,7 +403,14 @@ export default function BookProgressPage() {
 
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {pages.map((page) => (
-              <GenerationPageCard key={page.id} page={page} />
+              <GenerationPageCard
+                key={page.id}
+                page={page}
+                onRetry={retryPage}
+                onReplace={replacePhoto}
+                retrying={retryingPageId === page.id}
+                replacing={replacingPageId === page.id}
+              />
             ))}
           </div>
 

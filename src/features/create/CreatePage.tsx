@@ -10,6 +10,7 @@ import UploadSection from "./components/UploadSection";
 import { createBook } from "@/services/books/createBook";
 import { savePages } from "@/services/books/savePages";
 import { uploadBook } from "@/services/storage/uploadBook";
+import type { UploadedPage } from "@/services/storage/uploadBook";
 import { compressImages } from "@/services/images/compressImages";
 import { api } from "@/lib/firebase/api";
 
@@ -26,17 +27,30 @@ export default function CreatePage() {
   const [images, setImages] = useState<File[]>([]);
   const [compressing, setCompressing] =
   useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submittingLabel, setSubmittingLabel] = useState<string>();
 
   const router = useRouter();
 
   const uploadRef = useRef<HTMLDivElement>(null);
   const packageRef = useRef<HTMLDivElement>(null);
+  const draftBookIdRef = useRef<string | null>(null);
+  const uploadedPagesRef = useRef<UploadedPage[] | null>(null);
+  const pagesSavedRef = useRef(false);
+
+  function resetPendingUpload() {
+    uploadedPagesRef.current = null;
+    pagesSavedRef.current = false;
+  }
 
   function handleSelect(pkg: PackageType) {
     setSelectedPackage(pkg);
 
     // Reset uploads whenever the package changes
     setImages([]);
+    draftBookIdRef.current = null;
+    uploadedPagesRef.current = null;
+    pagesSavedRef.current = false;
 
     if (pkg !== "custom") {
       setTimeout(() => {
@@ -78,6 +92,7 @@ async function addImages(files: File[]) {
   }
 
   function removeImage(index: number) {
+    resetPendingUpload();
     setImages((previous) =>
       previous.filter((_, i) => i !== index)
     );
@@ -85,6 +100,8 @@ async function addImages(files: File[]) {
 
   function moveImageLeft(index: number) {
     if (index === 0) return;
+
+    resetPendingUpload();
 
     setImages((previous) => {
       const updated = [...previous];
@@ -99,6 +116,7 @@ async function addImages(files: File[]) {
   }
 
   function moveImageRight(index: number) {
+    resetPendingUpload();
     setImages((previous) => {
       if (index >= previous.length - 1) return previous;
 
@@ -114,6 +132,7 @@ async function addImages(files: File[]) {
   }
 
   function replaceImage(index: number, file: File) {
+    resetPendingUpload();
     setImages((previous) => {
       const updated = [...previous];
 
@@ -124,6 +143,8 @@ async function addImages(files: File[]) {
   }
 
 async function handleContinue() {
+  if (submitting) return;
+
   let stage:
     | "creating"
     | "uploading"
@@ -131,27 +152,39 @@ async function handleContinue() {
     | "generating" = "creating";
 
   try {
-    // 1. Create the book
-    const book = await createBook(pages);
+    setSubmitting(true);
 
-    console.log("Book created:", book);
+    // 1. Create the book
+    setSubmittingLabel("Starting your book…");
+    const bookId = draftBookIdRef.current ?? (await createBook(pages)).id;
+    draftBookIdRef.current = bookId;
+
+    console.log("Book ready:", bookId);
 
     // 2. Upload all photos
     stage = "uploading";
-    const uploadedPages = await uploadBook(book.id, images);
+    setSubmittingLabel("Uploading your photos…");
+    const uploadedPages =
+      uploadedPagesRef.current ?? (await uploadBook(bookId, images));
+    uploadedPagesRef.current = uploadedPages;
 
     // 3. Save the page order and uploaded file locations
     stage = "saving";
-    await savePages(book.id, uploadedPages);
+    if (!pagesSavedRef.current) {
+      setSubmittingLabel("Saving your page order…");
+      await savePages(bookId, uploadedPages);
+      pagesSavedRef.current = true;
+    }
 
     // 4. Tell the backend to start generating
     stage = "generating";
-    await api(`/api/generation/${book.id}`, {
+    setSubmittingLabel("Opening the Doodles studio…");
+    await api(`/api/generation/${bookId}`, {
       method: "POST",
     });
 
     // 5. Go to the progress page
-    router.push(`/books/${book.id}`);
+    router.push(`/books/${bookId}`);
 
   } catch (err) {
     console.error(err);
@@ -167,7 +200,14 @@ async function handleContinue() {
         "Your photos are saved, but we couldn't start the colouring process. Please try again.",
     };
 
-    alert(messages[stage]);
+    alert(
+      stage === "generating" && err instanceof Error
+        ? err.message
+        : messages[stage]
+    );
+  } finally {
+    setSubmitting(false);
+    setSubmittingLabel(undefined);
   }
 }
 
@@ -204,6 +244,8 @@ async function handleContinue() {
       addImages={addImages}
       compressing={compressing}      
       complete={complete}
+      submitting={submitting}
+      submittingLabel={submittingLabel}
       onRemove={removeImage}
       onReplace={replaceImage}
       onMoveLeft={moveImageLeft}

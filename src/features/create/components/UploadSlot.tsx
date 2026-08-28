@@ -66,7 +66,7 @@ export default function UploadSlot({
 
       <div className="border-b bg-gray-50 px-4 py-3">
         <p className="font-semibold text-gray-700">
-          Page {page} of {totalPages}
+          Memory {page} of {totalPages}
         </p>
       </div>
 
@@ -76,7 +76,7 @@ export default function UploadSlot({
         {imageUrl ? (
           <img
             src={imageUrl}
-            alt={`Page ${page}`}
+            alt={`Memory ${page}`}
             className="h-full w-full object-cover"
           />
         ) : (

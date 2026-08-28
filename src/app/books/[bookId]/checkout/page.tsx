@@ -155,7 +155,7 @@ export default function CheckoutPage() {
             Bring your book home
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-base font-semibold leading-7 text-white/85 sm:text-lg">
-            Tell us how to reach you and where your finished Doodlets book
+            Tell us how to reach you and where your finished Doodles book
             should go.
           </p>
         </header>
@@ -361,10 +361,10 @@ export default function CheckoutPage() {
                   <BookOpen className="h-7 w-7" />
                 </span>
                 <div>
-                  <p className="font-black">Your Doodlets colouring book</p>
+                  <p className="font-black">Your Doodles colouring book</p>
                   <p className="mt-1 text-sm font-medium text-white/65">
                     {book
-                      ? `${book.pageCount} personalised colouring pages`
+                      ? `${book.pageCount * 2}-page book · ${book.pageCount} photos + ${book.pageCount} colouring illustrations`
                       : "Loading your book details..."}
                   </p>
                 </div>
@@ -413,7 +413,7 @@ export default function CheckoutPage() {
 
               <div className="mt-5 flex items-center justify-center gap-2 text-xs font-bold text-white/55">
                 <LockKeyhole className="h-3.5 w-3.5" />
-                Your payment details are never stored by Doodlets
+                Your payment details are never stored by Doodles
               </div>
             </div>
           </aside>

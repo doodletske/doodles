@@ -1,5 +1,8 @@
 "use client";
 
+import { Info } from "lucide-react";
+
+import { useAuth } from "@/context/AuthContext";
 import UploadCounter from "./UploadCounter";
 import UploadDropzone from "./UploadDropzone";
 import UploadGrid from "./UploadGrid";
@@ -13,6 +16,8 @@ type Props = {
   compressing: boolean;
 
   complete: boolean;
+  submitting: boolean;
+  submittingLabel?: string;
 
   onRemove: (index: number) => void;
   onReplace: (index: number, file: File) => void;
@@ -29,6 +34,8 @@ export default function UploadSection({
   addImages,
   compressing,
   complete,
+  submitting,
+  submittingLabel,
   onRemove,
   onReplace,
   onMoveLeft,
@@ -36,6 +43,8 @@ export default function UploadSection({
   onContinue,
   onChangePackage,
 }: Props) {
+  const { user } = useAuth();
+
   return (
     <section
       id="upload-section"
@@ -57,6 +66,18 @@ export default function UploadSection({
           Upload exactly <strong>{pages}</strong> photos. Arrange them in the
           order you&apos;d like them to appear in your colouring book.
         </p>
+
+        {user?.isAnonymous && (
+          <div className="mt-5 flex max-w-3xl gap-3 rounded-2xl border border-[#f3d46a] bg-[#fff8dc] p-4 text-sm leading-6 text-[#6f5200]">
+            <Info className="mt-0.5 h-5 w-5 shrink-0 text-[#d99a00]" />
+            <p>
+              <strong>Guest preview limit:</strong> Guest accounts can generate
+              up to 16 photos across unpaid books per day. This keeps free
+              previews fair and prevents automated misuse. Your photos remain
+              available while you complete this book.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Progress */}
@@ -93,6 +114,8 @@ export default function UploadSection({
         complete={complete}
         uploaded={images.length}
         pages={pages}
+        submitting={submitting}
+        submittingLabel={submittingLabel}
         onContinue={onContinue}
         onChangePackage={onChangePackage}
       />

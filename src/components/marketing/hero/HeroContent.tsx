@@ -25,18 +25,19 @@ export default function HeroContent() {
 
       <div className="relative z-10">
         <p className="inline-flex rounded-full bg-white/15 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white">
-          Made from your memories
+          Personalised colouring books made from your photos
         </p>
         <h1 className="mt-5 text-5xl font-black leading-[1.02] tracking-tight text-white lg:text-6xl">
-          Photos that turn into
+          Turn family photos into a
           <br />
-          their next <span className="text-[#ffdf67]">favourite book.</span>
+          <span className="text-[#ffdf67]">colouring book made just for them.</span>
         </h1>
 
         <p className="mt-5 max-w-xl text-lg leading-7 text-blue-50">
-          Upload 8–16 favourite memories. We turn them into a one-of-a-kind A4
-          sized colouring book, print it beautifully, and have it delivered to
-          a location of your choosing.
+          Upload 8 or 16 favourite memories. Every photo appears beside its own
+          personalised colouring illustration—creating a beautiful 16- or
+          32-page A4 book, professionally printed and delivered to your
+          preferred location.
         </p>
 
         <div className="mt-7">

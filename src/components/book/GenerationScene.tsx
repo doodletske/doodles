@@ -36,7 +36,7 @@ function DeliveryBird({
     >
       <Image
         src="/images/decor/doodlets-flying-bird.png"
-        alt="A yellow Doodlets bird carrying a photograph"
+        alt="A yellow Doodles bird carrying a photograph"
         width={180}
         height={180}
         priority
@@ -96,7 +96,7 @@ export default function GenerationScene({
           </span>
           <p className="mt-3 text-sm font-black">Your book is ready</p>
           <p className="mt-1 text-xs font-semibold text-[#657087]">
-            {pageCount} pages beautifully illustrated
+            {pageCount} colouring pages beautifully illustrated
           </p>
         </div>
       )}
@@ -116,7 +116,7 @@ export default function GenerationScene({
 
       {!ready && (
         <div className="absolute bottom-5 left-5 z-20 max-w-[13rem] rounded-2xl bg-[#243451]/85 px-4 py-3 text-xs font-bold leading-5 text-white backdrop-blur-sm sm:bottom-8 sm:left-8 sm:max-w-xs sm:text-sm">
-          The birds are carrying your memories to the Doodlets printer.
+          The birds are carrying your memories to the Doodles printer.
         </div>
       )}
     </div>

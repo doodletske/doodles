@@ -34,7 +34,7 @@ export default function CustomPackage({
         {/* Call */}
 
         <a
-          href="tel:+254111350052"
+          href="tel:+254111350042"
           className="rounded-3xl border border-gray-200 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
         >
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-orange-600">
@@ -57,7 +57,7 @@ export default function CustomPackage({
         {/* WhatsApp */}
 
         <a
-          href="https://wa.me/254111350052"
+          href="https://wa.me/254111350042"
           target="_blank"
           rel="noopener noreferrer"
           className="rounded-3xl border border-gray-200 p-8 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg"

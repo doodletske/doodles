@@ -144,7 +144,7 @@ export default function PackageCard({
 
           {!isCustom && (
             <div className={`mt-1 text-sm font-semibold ${style.muted}`}>
-              {pkg.pages} personalised colouring pages
+              {pkg.pages * 2}-page personalised book
             </div>
           )}
         </div>

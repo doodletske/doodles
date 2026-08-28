@@ -1,12 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import { useRef } from "react";
 import {
   Check,
   Clock3,
   LoaderCircle,
+  RefreshCw,
   Sparkles,
   TriangleAlert,
+  Upload,
 } from "lucide-react";
 
 export type GenerationBookPage = {
@@ -15,10 +18,15 @@ export type GenerationBookPage = {
   status: string;
   originalUrl: string;
   coloringUrl: string | null;
+  failureReason?: string | null;
 };
 
 type Props = {
   page: GenerationBookPage;
+  onRetry?: (page: GenerationBookPage) => void;
+  onReplace?: (page: GenerationBookPage, file: File) => void;
+  retrying?: boolean;
+  replacing?: boolean;
 };
 
 const statusDetails = {
@@ -59,7 +67,14 @@ const statusDetails = {
   },
 } as const;
 
-export default function GenerationPageCard({ page }: Props) {
+export default function GenerationPageCard({
+  page,
+  onRetry,
+  onReplace,
+  retrying = false,
+  replacing = false,
+}: Props) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const details =
     statusDetails[page.status as keyof typeof statusDetails] ??
     statusDetails.UPLOADED;
@@ -69,6 +84,26 @@ export default function GenerationPageCard({ page }: Props) {
       ? page.coloringUrl
       : page.originalUrl;
   const isGenerating = page.status === "GENERATING";
+  const needsReplacement =
+    page.failureReason === "SAFETY_REJECTION" ||
+    page.failureReason === "INVALID_IMAGE" ||
+    page.failureReason === "RETRY_LIMIT_REACHED";
+  const failureExplanation =
+    page.failureReason === "SAFETY_REJECTION"
+      ? "Our automatic safety checks couldn't process this photo. This can sometimes happen with swimwear, very young children or unclear images. Please choose a different photo."
+      : page.failureReason === "INVALID_IMAGE"
+        ? "We couldn't read this image clearly. Please replace it with a clear JPG, PNG or WebP photo."
+        : page.failureReason === "RETRY_LIMIT_REACHED"
+          ? "We tried to illustrate this photo twice, but it still couldn't be completed. Please choose another photo so we don't keep charging the illustration engine for the same result."
+        : page.failureReason === "PREVIEW_ERROR"
+          ? "Your illustration was created, but its preview couldn't be prepared. Please try again."
+          : page.failureReason === "CAPACITY_LIMIT"
+            ? "The Doodles studio has reached today's safe generation capacity. Your photo is saved, so please try again tomorrow."
+          : "The illustration service couldn't accept this photo on the last attempt. Automatic safety checks, image quality or a temporary issue may be responsible. Try once more, then replace it if the problem continues.";
+  const statusLabel = needsReplacement ? "Photo needs replacing" : details.label;
+  const statusHelper = needsReplacement
+    ? "Please choose a different photo"
+    : details.helper;
 
   return (
     <article
@@ -124,13 +159,54 @@ export default function GenerationPageCard({ page }: Props) {
           <span
             className={`inline-flex rounded-full px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-[0.09em] ${details.badge}`}
           >
-            {details.label}
+            {statusLabel}
           </span>
           <p className="mt-1 truncate text-xs font-semibold text-[#657087]">
-            {details.helper}
+            {statusHelper}
           </p>
         </div>
       </div>
+
+      {page.status === "FAILED" && (onRetry || onReplace) && (
+        <div className="border-t border-[#edf1f7] p-3">
+          <p className="mb-3 text-xs font-semibold leading-5 text-[#657087]">
+            {failureExplanation}
+          </p>
+          <div className={`grid gap-2 ${needsReplacement ? "grid-cols-1" : "grid-cols-2"}`}>
+            {!needsReplacement && (
+              <button
+                type="button"
+                onClick={() => onRetry?.(page)}
+                disabled={!onRetry || retrying || replacing}
+                className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[#e9f1ff] px-3 text-xs font-black text-[#315dbe] disabled:opacity-60"
+              >
+                <RefreshCw className={`h-4 w-4 ${retrying ? "animate-spin" : ""}`} />
+                {retrying ? "Trying…" : "Try again"}
+              </button>
+            )}
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={!onReplace || retrying || replacing}
+            className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[#fff3c4] px-3 text-xs font-black text-[#765000] disabled:opacity-60"
+          >
+            <Upload className={`h-4 w-4 ${replacing ? "animate-pulse" : ""}`} />
+            {replacing ? "Replacing…" : needsReplacement ? "Choose another photo" : "Replace photo"}
+          </button>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) onReplace?.(page, file);
+              event.currentTarget.value = "";
+            }}
+          />
+        </div>
+      )}
     </article>
   );
 }

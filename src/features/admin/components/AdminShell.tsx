@@ -28,7 +28,7 @@ function AdminGate({ children }: { children: ReactNode }) {
 
     api<AdminSession>("/api/admin/session")
       .then((data) => { if (active) setSession(data); })
-      .catch(() => { if (active) setError("This area is restricted to Doodlets administrators."); })
+      .catch(() => { if (active) setError("This area is restricted to Doodles administrators."); })
       .finally(() => { if (active) setLoading(false); });
 
     return () => { active = false; };
@@ -53,7 +53,7 @@ function AdminGate({ children }: { children: ReactNode }) {
           <h1 className="mt-5 text-2xl font-black text-[#18233b]">Admin access required</h1>
           <p className="mt-3 font-medium leading-6 text-[#6e788c]">{error}</p>
           <Link href="/" className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#315dbe] px-6 font-black text-white">
-            <ArrowLeft className="h-4 w-4" /> Return to Doodlets
+            <ArrowLeft className="h-4 w-4" /> Return to Doodles
           </Link>
         </div>
       </div>

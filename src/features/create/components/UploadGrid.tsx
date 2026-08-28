@@ -52,9 +52,10 @@ export default function UploadGrid({
     <div className="mt-12">
       <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h3 className="text-2xl font-black text-[#1d2841]">Book Pages</h3>
+          <h3 className="text-2xl font-black text-[#1d2841]">Your Photo Memories</h3>
           <p className="mt-1 text-sm font-medium text-[#697287]">
-            The order below is the order your pages will appear in the book.
+            Each photo will sit beside its colouring illustration. Arrange the
+            memories below in the order they should appear.
           </p>
         </div>
 
@@ -131,7 +132,7 @@ export default function UploadGrid({
                 />
 
                 <p className="mt-4 font-semibold text-gray-800">
-                  Page {images.length + 1} of {required}
+                  Memory {images.length + 1} of {required}
                 </p>
 
                 <p className="mt-2 text-sm text-gray-500">

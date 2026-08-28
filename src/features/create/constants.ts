@@ -4,27 +4,28 @@ export const PACKAGES: BookPackage[] = [
   {
     id: "little",
     title: "Little Doodler",
-    tagline: "A perfect first adventure",
+    tagline: "16 special pages from 8 memories",
     pages: 8,
     price: "KES 1,199",
     description:
-      "Turn eight favourite moments into a joyful personalised colouring book made just for them.",
+      "Turn eight favourite moments into a 16-page personalised book with every original photo beside its matching colouring illustration.",
     highlights: [
-      "8 photo-to-colouring pairs",
-      "A lovely first keepsake",
+      "8 photos + 8 colouring pages",
+      "16 printed interior pages",
     ],
   },
   {
     id: "big",
     title: "Big Dreamer",
-    tagline: "More moments to colour",
+    tagline: "32 pages of memories and colouring fun",
     pages: 16,
-    price: "KES 1,799",
+    price: "KES 1,899",
     featured: true,
     description:
-      "Keep more of the moments you love with sixteen personalised colouring pages in one beautiful book.",
+      "Keep sixteen favourite moments in a 32-page personalised book pairing every photo with its own colouring illustration.",
     highlights: [
-      "16 photo-to-colouring pairs",
+      "16 photos + 16 colouring pages",
+      "32 printed interior pages",
       "Best value per page",
     ],
   },

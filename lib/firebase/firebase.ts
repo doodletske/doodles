@@ -2,7 +2,7 @@ const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL;
 const API_BASE_URL =
   process.env.NODE_ENV === "production" &&
   (!configuredApiUrl || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(configuredApiUrl))
-    ? "https://doodlets-api.doodletske.workers.dev"
+    ? "https://api.doodles.co.ke"
     : configuredApiUrl || "http://localhost:5000";
 
 export async function api<T>(
