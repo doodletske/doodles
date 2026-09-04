@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import Script from "next/script";
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -37,6 +38,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-white text-gray-900">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-0K95F0RTNG"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-0K95F0RTNG');
+          `}
+        </Script>
         <AuthProvider>
           <AuthModalProvider>
             <Navbar />
