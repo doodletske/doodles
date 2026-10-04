@@ -29,6 +29,7 @@ export default function CreatePage() {
   useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submittingLabel, setSubmittingLabel] = useState<string>();
+  const [photoConsent, setPhotoConsent] = useState(false);
 
   const router = useRouter();
 
@@ -48,6 +49,7 @@ export default function CreatePage() {
 
     // Reset uploads whenever the package changes
     setImages([]);
+    setPhotoConsent(false);
     draftBookIdRef.current = null;
     uploadedPagesRef.current = null;
     pagesSavedRef.current = false;
@@ -144,6 +146,7 @@ async function addImages(files: File[]) {
 
 async function handleContinue() {
   if (submitting) return;
+  if (!photoConsent) return;
 
   let stage:
     | "creating"
@@ -246,6 +249,8 @@ async function handleContinue() {
       complete={complete}
       submitting={submitting}
       submittingLabel={submittingLabel}
+      photoConsent={photoConsent}
+      onPhotoConsentChange={setPhotoConsent}
       onRemove={removeImage}
       onReplace={replaceImage}
       onMoveLeft={moveImageLeft}

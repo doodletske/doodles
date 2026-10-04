@@ -38,6 +38,9 @@ export default function Footer() {
               <Link className="transition hover:text-[#ffdf67]" href="/#contact">
                 Contact
               </Link>
+              <Link className="transition hover:text-[#ffdf67]" href="/privacy">
+                Privacy
+              </Link>
             </nav>
           </div>
 

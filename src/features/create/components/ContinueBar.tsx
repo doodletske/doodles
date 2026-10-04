@@ -6,6 +6,7 @@ type Props = {
   pages: number;
   submitting: boolean;
   submittingLabel?: string;
+  photoConsent: boolean;
   onContinue: () => void;
   onChangePackage: () => void;
 };
@@ -16,6 +17,7 @@ export default function ContinueBar({
   pages,
   submitting,
   submittingLabel,
+  photoConsent,
   onContinue,
   onChangePackage,
 }: Props) {
@@ -50,7 +52,7 @@ export default function ContinueBar({
 
       <button
         onClick={onContinue}
-        disabled={!complete || submitting}
+        disabled={!complete || !photoConsent || submitting}
         className={`w-full rounded-xl py-4 text-lg font-semibold text-white transition ${
           complete && !submitting
             ? "bg-blue-600 hover:bg-blue-700"
@@ -72,6 +74,7 @@ export default function ContinueBar({
           Change Package
         </button>
       </div>
+
     </div>
   );
 }

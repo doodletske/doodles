@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Info } from "lucide-react";
 
 import { useAuth } from "@/context/AuthContext";
@@ -18,6 +19,8 @@ type Props = {
   complete: boolean;
   submitting: boolean;
   submittingLabel?: string;
+  photoConsent: boolean;
+  onPhotoConsentChange: (accepted: boolean) => void;
 
   onRemove: (index: number) => void;
   onReplace: (index: number, file: File) => void;
@@ -36,6 +39,8 @@ export default function UploadSection({
   complete,
   submitting,
   submittingLabel,
+  photoConsent,
+  onPhotoConsentChange,
   onRemove,
   onReplace,
   onMoveLeft,
@@ -94,7 +99,22 @@ export default function UploadSection({
         images={images}
         addImages={addImages}
         compressing={compressing}
+        photoConsent={photoConsent}
       />
+
+      <label className="relative mt-8 flex cursor-pointer items-start gap-4 rounded-2xl border-2 border-[#8eb4ed] bg-[#f4f8ff] p-5 text-sm leading-6 text-[#34425f] shadow-sm transition hover:border-[#315dbe]">
+        <input
+          type="checkbox"
+          checked={photoConsent}
+          onChange={(event) => onPhotoConsentChange(event.target.checked)}
+          className="mt-1 h-5 w-5 shrink-0 accent-[#315dbe]"
+        />
+        <span>
+          <strong className="text-[#1d2841]">I confirm I am the parent or legal guardian, or have permission to upload these photos.</strong>{" "}
+          I understand Doodlets will use them only to create and deliver this book and not sell them, make them public, or use them for marketing, testing, or AI training.{" "}
+          <Link href="/privacy" className="font-bold text-[#315dbe] underline underline-offset-2">Read our Privacy Policy</Link>.
+        </span>
+      </label>
 
       {/* Book Pages */}
 
@@ -116,6 +136,7 @@ export default function UploadSection({
         pages={pages}
         submitting={submitting}
         submittingLabel={submittingLabel}
+        photoConsent={photoConsent}
         onContinue={onContinue}
         onChangePackage={onChangePackage}
       />

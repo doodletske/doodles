@@ -8,6 +8,7 @@ type Props = {
   images: File[];
   addImages: (files: File[]) => void;
   compressing: boolean;
+  photoConsent: boolean;
 };
 
 export default function UploadDropzone({
@@ -15,16 +16,19 @@ export default function UploadDropzone({
   images,
   addImages,
   compressing,
+  photoConsent,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [dragging, setDragging] = useState(false);
 
   function openPicker() {
+    if (!canUpload) return;
     inputRef.current?.click();
   }
 
   function handleInput(e: ChangeEvent<HTMLInputElement>) {
+    if (!canUpload) return;
     addImages(Array.from(e.target.files ?? []));
 
     // Allows selecting the same file twice
@@ -36,14 +40,18 @@ export default function UploadDropzone({
 
     setDragging(false);
 
+    if (!canUpload) return;
+
     addImages(Array.from(e.dataTransfer.files));
   }
 
   function handleDragOver(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
+    if (!canUpload) return;
   }
 
   const remaining = pages - images.length;
+  const canUpload = photoConsent && remaining > 0 && !compressing;
 
   return (
     <>
@@ -53,16 +61,19 @@ export default function UploadDropzone({
         type="file"
         multiple
         accept="image/*"
+        disabled={!canUpload}
         onChange={handleInput}
       />
 
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        onDragEnter={() => setDragging(true)}
+        onDragEnter={() => canUpload && setDragging(true)}
         onDragLeave={() => setDragging(false)}
         className={`mt-10 rounded-3xl border-2 border-dashed p-12 text-center transition-all duration-200 ${
-          dragging
+          !canUpload
+            ? "border-gray-200 bg-gray-100 text-gray-400"
+            : dragging
             ? "border-blue-500 bg-blue-50"
             : "border-gray-300 bg-gray-50"
         }`}
@@ -70,7 +81,7 @@ export default function UploadDropzone({
         <UploadCloud
           size={64}
           className={`mx-auto ${
-            dragging ? "text-blue-600" : "text-gray-400"
+            canUpload && dragging ? "text-blue-600" : "text-gray-400"
           }`}
         />
 
@@ -87,14 +98,18 @@ export default function UploadDropzone({
         <button
           type="button"
           onClick={openPicker}
-          disabled={remaining === 0}
-          className={`rounded-xl px-8 py-4 font-semibold text-white transition ${
-            remaining > 0
+          disabled={!canUpload}
+          className={`rounded-xl px-8 py-4 font-semibold text-white transition-colors duration-300 ${
+            canUpload
               ? "bg-blue-600 hover:bg-blue-700"
-              : "cursor-not-allowed bg-green-600"
+              : "cursor-not-allowed bg-gray-300"
           }`}
         >
-          {remaining > 0
+          {!photoConsent
+            ? "Confirm permission to upload"
+            : compressing
+            ? "Preparing your photos…"
+            : remaining > 0
             ? `Select ${remaining} More Photo${
                 remaining === 1 ? "" : "s"
               }`

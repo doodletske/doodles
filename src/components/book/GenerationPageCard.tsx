@@ -19,6 +19,8 @@ export type GenerationBookPage = {
   originalUrl: string;
   coloringUrl: string | null;
   failureReason?: string | null;
+  hasUsedRegeneration: boolean;
+  hasUsedReplacement: boolean;
 };
 
 type Props = {
@@ -88,18 +90,26 @@ export default function GenerationPageCard({
     page.failureReason === "SAFETY_REJECTION" ||
     page.failureReason === "INVALID_IMAGE" ||
     page.failureReason === "RETRY_LIMIT_REACHED";
+  const canRegenerate =
+    !needsReplacement && !page.hasUsedRegeneration && !page.hasUsedReplacement;
+  const canReplace =
+    !page.hasUsedRegeneration && !page.hasUsedReplacement;
   const failureExplanation =
     page.failureReason === "SAFETY_REJECTION"
       ? "Our automatic safety checks couldn't process this photo. This can sometimes happen with swimwear, very young children or unclear images. Please choose a different photo."
       : page.failureReason === "INVALID_IMAGE"
         ? "We couldn't read this image clearly. Please replace it with a clear JPG, PNG or WebP photo."
         : page.failureReason === "RETRY_LIMIT_REACHED"
-          ? "We tried to illustrate this photo twice, but it still couldn't be completed. Please choose another photo so we don't keep charging the illustration engine for the same result."
+          ? "This photo has used its one regeneration. To avoid further illustration charges, it cannot be replaced or regenerated again."
         : page.failureReason === "PREVIEW_ERROR"
           ? "Your illustration was created, but its preview couldn't be prepared. Please try again."
           : page.failureReason === "CAPACITY_LIMIT"
             ? "The Doodles studio has reached today's safe generation capacity. Your photo is saved, so please try again tomorrow."
-          : "The illustration service couldn't accept this photo on the last attempt. Automatic safety checks, image quality or a temporary issue may be responsible. Try once more, then replace it if the problem continues.";
+          : page.hasUsedRegeneration
+            ? "This photo has already used its one regeneration, so it cannot be replaced or regenerated again."
+            : page.hasUsedReplacement
+              ? "This replacement photo receives one illustration attempt only, so it cannot be replaced or regenerated again."
+              : "Choose either one regeneration or one replacement photo. After either choice, no further changes can be made to this page.";
   const statusLabel = needsReplacement ? "Photo needs replacing" : details.label;
   const statusHelper = needsReplacement
     ? "Please choose a different photo"
@@ -167,44 +177,55 @@ export default function GenerationPageCard({
         </div>
       </div>
 
-      {page.status === "FAILED" && (onRetry || onReplace) && (
+      {page.status === "FAILED" && (
         <div className="border-t border-[#edf1f7] p-3">
           <p className="mb-3 text-xs font-semibold leading-5 text-[#657087]">
             {failureExplanation}
           </p>
-          <div className={`grid gap-2 ${needsReplacement ? "grid-cols-1" : "grid-cols-2"}`}>
-            {!needsReplacement && (
-              <button
-                type="button"
-                onClick={() => onRetry?.(page)}
-                disabled={!onRetry || retrying || replacing}
-                className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[#e9f1ff] px-3 text-xs font-black text-[#315dbe] disabled:opacity-60"
-              >
-                <RefreshCw className={`h-4 w-4 ${retrying ? "animate-spin" : ""}`} />
-                {retrying ? "Trying…" : "Try again"}
-              </button>
-            )}
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={!onReplace || retrying || replacing}
-            className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[#fff3c4] px-3 text-xs font-black text-[#765000] disabled:opacity-60"
-          >
-            <Upload className={`h-4 w-4 ${replacing ? "animate-pulse" : ""}`} />
-            {replacing ? "Replacing…" : needsReplacement ? "Choose another photo" : "Replace photo"}
-          </button>
-          </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            className="hidden"
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (file) onReplace?.(page, file);
-              event.currentTarget.value = "";
-            }}
-          />
+          {(canRegenerate || canReplace) && (
+            <>
+              <div className={`grid gap-2 ${canRegenerate && canReplace ? "grid-cols-2" : "grid-cols-1"}`}>
+                {canRegenerate && (
+                  <button
+                    type="button"
+                    onClick={() => onRetry?.(page)}
+                    disabled={!onRetry || retrying || replacing}
+                    className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[#e9f1ff] px-3 text-xs font-black text-[#315dbe] disabled:opacity-60"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${retrying ? "animate-spin" : ""}`} />
+                    {retrying ? "Trying…" : "Try again"}
+                  </button>
+                )}
+                {canReplace && (
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={!onReplace || retrying || replacing}
+                    className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-[#fff3c4] px-3 text-xs font-black text-[#765000] disabled:opacity-60"
+                  >
+                    <Upload className={`h-4 w-4 ${replacing ? "animate-pulse" : ""}`} />
+                    {replacing ? "Replacing…" : needsReplacement ? "Choose another photo" : "Replace photo"}
+                  </button>
+                )}
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) onReplace?.(page, file);
+                  event.currentTarget.value = "";
+                }}
+              />
+            </>
+          )}
+          {!canRegenerate && !canReplace && (
+            <p className="rounded-xl bg-[#f7f9fd] px-3 py-2 text-xs font-bold text-[#657087]">
+              This page has used its available change option.
+            </p>
+          )}
         </div>
       )}
     </article>

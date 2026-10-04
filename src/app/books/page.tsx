@@ -13,6 +13,7 @@ import {
   Plus,
   RefreshCw,
   Sparkles,
+  Trash2,
 } from "lucide-react";
 
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -131,10 +132,14 @@ function BookHistoryCard({
   book,
   reordering,
   onReorder,
+  deleting,
+  onDelete,
 }: {
   book: MyBook;
   reordering: boolean;
   onReorder: (bookId: string) => void;
+  deleting: boolean;
+  onDelete: (bookId: string) => void;
 }) {
   const isPurchased =
     book.orderStatus !== null &&
@@ -148,6 +153,7 @@ function BookHistoryCard({
     description: "This book has been saved to your library.",
   };
   const isGenerating = ["UPLOADING", "GENERATING"].includes(book.status);
+  const canDelete = book.orderStatus === "COMPLETED";
 
   return (
     <article className="group overflow-hidden rounded-[1.75rem] border border-white/55 bg-white shadow-[0_20px_45px_rgba(24,55,112,0.18)] transition hover:-translate-y-1 hover:shadow-[0_26px_55px_rgba(24,55,112,0.24)]">
@@ -243,6 +249,22 @@ function BookHistoryCard({
               Reorder
             </button>
           )}
+
+          {canDelete && (
+            <button
+              type="button"
+              disabled={deleting}
+              onClick={() => onDelete(book.id)}
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full border border-[#efb1b1] bg-white px-4 text-sm font-black text-[#b64646] transition hover:bg-[#fff2f2] disabled:cursor-wait disabled:opacity-65"
+            >
+              {deleting ? (
+                <LoaderCircle className="h-4 w-4 animate-spin" />
+              ) : (
+                <Trash2 className="h-4 w-4" />
+              )}
+              Delete My Project
+            </button>
+          )}
         </div>
       </div>
     </article>
@@ -255,6 +277,7 @@ function MyBooksContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [reorderingId, setReorderingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -299,6 +322,29 @@ function MyBooksContent() {
           : "We couldn't prepare this reorder.",
       );
       setReorderingId(null);
+    }
+  }
+
+  async function handleDelete(bookId: string) {
+    const confirmed = window.confirm(
+      "Delete this fulfilled project? Its uploaded and generated images will be permanently removed and this cannot be undone.",
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setError("");
+      setDeletingId(bookId);
+      await api(`/api/books/${bookId}`, { method: "DELETE" });
+      setBooks((current) => current.filter((book) => book.id !== bookId));
+    } catch (deleteError) {
+      setError(
+        deleteError instanceof Error
+          ? deleteError.message
+          : "We couldn't delete this project.",
+      );
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -424,6 +470,8 @@ function MyBooksContent() {
                       book={book}
                       reordering={reorderingId === book.id}
                       onReorder={handleReorder}
+                      deleting={deletingId === book.id}
+                      onDelete={handleDelete}
                     />
                   ))}
                 </div>
@@ -450,6 +498,8 @@ function MyBooksContent() {
                       book={book}
                       reordering={reorderingId === book.id}
                       onReorder={handleReorder}
+                      deleting={deletingId === book.id}
+                      onDelete={handleDelete}
                     />
                   ))}
                 </div>
