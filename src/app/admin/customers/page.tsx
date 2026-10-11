@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { BookOpen, LoaderCircle, Mail, Phone, Search, Users } from "lucide-react";
 
 import AdminPageHeader from "@/features/admin/components/AdminPageHeader";
@@ -67,7 +68,7 @@ export default function AdminCustomersPage() {
                 </div>
 
                 <div className="mt-6 grid grid-cols-3 gap-3">
-                  <div className="rounded-2xl bg-[#f6f8fc] p-3 text-center"><BookOpen className="mx-auto h-4 w-4 text-[#315dbe]" /><p className="mt-2 text-lg font-black text-[#18233b]">{customer.bookCount}</p><p className="text-[0.68rem] font-bold text-[#8992a4]">Books</p></div>
+                  <Link href={`/admin/customers/${customer.id}/books`} className="rounded-2xl bg-[#f6f8fc] p-3 text-center transition hover:bg-[#e9f1ff] focus:outline-none focus:ring-2 focus:ring-[#315dbe]" aria-label={`View ${customerName}'s books`}><BookOpen className="mx-auto h-4 w-4 text-[#315dbe]" /><p className="mt-2 text-lg font-black text-[#18233b]">{customer.bookCount}</p><p className="text-[0.68rem] font-bold text-[#315dbe]">View books</p></Link>
                   <div className="rounded-2xl bg-[#f1fbf5] p-3 text-center"><p className="text-lg font-black text-[#188447]">{customer.paidOrderCount}</p><p className="mt-2 text-[0.68rem] font-bold text-[#8992a4]">Paid orders</p></div>
                   <div className="rounded-2xl bg-[#fffaf0] p-3 text-center"><p className="text-sm font-black text-[#9b6a00]">{formatKes(customer.totalSpent)}</p><p className="mt-2 text-[0.68rem] font-bold text-[#8992a4]">Spent</p></div>
                 </div>
