@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft, BookOpen, Image as ImageIcon, LoaderCircle } from "lucide-react";
 
@@ -31,19 +32,21 @@ type CustomerBooksResponse = {
   books: CustomerBook[];
 };
 
-export default function AdminCustomerBooksPage({ params }: PageProps<"/admin/customers/[customerId]/books">) {
+export default function AdminCustomerBooksPage() {
+  const params = useParams<{ customerId: string }>();
+  const customerId = params.customerId;
   const [data, setData] = useState<CustomerBooksResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     let active = true;
-    api<CustomerBooksResponse>(`/api/admin/customers/${params.customerId}/books`)
+    api<CustomerBooksResponse>(`/api/admin/customers/${customerId}/books`)
       .then((response) => { if (active) setData(response); })
       .catch((loadError) => { if (active) setError(loadError instanceof Error ? loadError.message : "Unable to load this customer's books."); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [params.customerId]);
+  }, [customerId]);
 
   const customerName = data?.customer.name ?? "Guest customer";
 
